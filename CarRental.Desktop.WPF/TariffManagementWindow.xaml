@@ -1,0 +1,76 @@
+﻿<Window x:Class="CarRental.Desktop.WPF.TariffManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Gestion des Tarifs (WPF)" Height="683" Width="1324">
+
+    <Grid Margin="15">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Ligne 0: Champs de saisie -->
+            <RowDefinition Height="*"/>
+            <!-- Ligne 1: DataGrid -->
+            <RowDefinition Height="Auto"/>
+            <!-- Ligne 2: Boutons CRUD -->
+        </Grid.RowDefinitions>
+
+        <!-- Ligne 0 : Champs de Saisie -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Ligne pour le Type de Véhicule -->
+                </Grid.RowDefinitions>
+
+                <!-- Ligne 0 : Description du tarif -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Description du tarif :" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtTariffDescription" Grid.Row="0" Grid.Column="1" Height="30" Margin="5" 
+                         ToolTip="Nom du tarif, ex: 'Haute Saison', 'Kilométrage illimité'"/>
+
+                <!-- Ligne 1 : Prix par jour -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Prix par jour :" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtPricePerDay" Grid.Row="1" Grid.Column="1" Height="30" Margin="5" 
+                         ToolTip="Taux journalier (utilisez la virgule ou le point)"/>
+
+                <!-- Ligne 2 : SÉLECTION DU TYPE DE VÉHICULE (CLÉ ÉTRANGÈRE) -->
+                <Label Grid.Row="2" Grid.Column="0" Content="Type de Véhicule :" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cmbVehicleType" 
+                          Grid.Row="2" Grid.Column="1" Height="30" Margin="5"
+                          DisplayMemberPath="Name"           
+                          SelectedValuePath="VehicleTypeId"
+                          ToolTip="Le type de véhicule auquel ce tarif s'applique (Berline, SUV, etc.)"/>
+                <!-- SelectedValuePath (GUID) est la propriété qui sera utilisée pour l'insertion -->
+
+            </Grid>
+        </StackPanel>
+
+        <!-- Ligne 1 : DataGrid -->
+        <DataGrid x:Name="dgvTariffs" 
+                  Grid.Row="1" 
+                  AutoGenerateColumns="True" 
+                  IsReadOnly="True" 
+                  SelectionMode="Single"
+                  Margin="0,0,0,15"
+                  SelectionChanged="DgvTariffs_SelectionChanged"
+                  AutoGeneratingColumn="DgvTariffs_AutoGeneratingColumn"/>
+        <!-- L'événement AutoGeneratingColumn permet de cacher les collections comme 'Vehicles' et 'Tariffs' si vous l'ajoutez ici, sinon il est ignoré -->
+
+        <!-- Ligne 2 : Boutons CRUD -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="btnAdd" Content="Ajouter" Width="100" Margin="10,0" Click="BtnAdd_Click"/>
+            <Button x:Name="btnUpdate" Content="Modifier" Width="100" Margin="10,0" Click="BtnUpdate_Click"/>
+            <Button x:Name="btnDelete" Content="Supprimer" Width="100" Margin="10,0" Click="BtnDelete_Click"/>
+            <Button x:Name="btnClear" Content="Effacer" Width="100" Margin="10,0" Click="BtnClear_Click"/>
+        </StackPanel>
+
+    </Grid>
+</Window>

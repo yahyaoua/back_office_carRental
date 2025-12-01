@@ -1,0 +1,168 @@
+﻿<Window x:Class="CarRental.Desktop.WPF.ReservationCreationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Créer Nouvelle Réservation" 
+        Height="800"
+        Width="650"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Titre -->
+            <RowDefinition Height="Auto"/>
+            <!-- Formulaire de Réservation -->
+            <RowDefinition Height="Auto"/>
+            <!-- Boutons -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid des Réservations Actives -->
+        </Grid.RowDefinitions>
+
+        <!-- Ligne 0 : Titre -->
+        <TextBlock Grid.Row="0" 
+                   Text="Nouvelle Réservation" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   Margin="0,0,0,20"
+                   Foreground="#007ACC"
+                   HorizontalAlignment="Center"/>
+
+        <!-- Ligne 1 : Formulaire de Saisie -->
+        <Border Grid.Row="1" 
+                BorderBrush="#007ACC" 
+                BorderThickness="1" 
+                CornerRadius="8" 
+                Padding="20" 
+                Background="#E6F0FF" 
+                Margin="0,0,0,20">
+
+            <StackPanel>
+                <!-- ComboBox Client -->
+                <TextBlock Text="Client (Sélection) :" Margin="0,5,0,2" FontWeight="SemiBold"/>
+                <ComboBox x:Name="cmbClient" 
+                          ItemsSource="{Binding AvailableClients}"
+                          SelectedValuePath="ClientId"
+                          Margin="0,0,0,10" Padding="5"
+                          ToolTip="Liste des clients réels chargés depuis la base de données.">
+                    <!-- CORRECTION: Suppression de DisplayMemberPath pour utiliser seulement l'ItemTemplate -->
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Supposons que Client a FirstName et LastName -->
+                            <TextBlock>
+                                <Run Text="{Binding LastName, Mode=OneWay}"/>
+                                <Run Text=" "/>
+                                <Run Text="{Binding FirstName, Mode=OneWay}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!-- ComboBox Véhicule -->
+                <TextBlock Text="Véhicule (Sélection) :" Margin="0,5,0,2" FontWeight="SemiBold"/>
+                <ComboBox x:Name="cmbVehicle" 
+                          ItemsSource="{Binding AvailableVehicles}"
+                          SelectedValuePath="VehicleId"
+                          Margin="0,0,0,10" Padding="5"
+                          SelectionChanged="CmbVehicle_SelectionChanged"
+                          ToolTip="Liste des véhicules réels disponibles.">
+                    <!-- CORRECTION: Suppression de DisplayMemberPath pour utiliser seulement l'ItemTemplate -->
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Supposons que Vehicle a PlateNumber, Make, Model, et BaseRatePerDay -->
+                            <TextBlock>
+                                <Run Text="{Binding PlateNumber, Mode=OneWay}"/>
+                                <Run Text=" - "/>
+                                <Run Text="{Binding Make, Mode=OneWay}"/>
+                                <Run Text=" "/>
+                                <Run Text="{Binding Model, Mode=OneWay}"/>
+                                <Run Text=" (€ "/>
+                                <Run Text="{Binding BaseRatePerDay, StringFormat='F2'}"/>
+                                <Run Text="/jour)"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!-- Dates de Début et de Fin (RequestedStart/RequestedEnd) -->
+                <Grid Margin="0,5,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock Text="Date de Début Demandée :" Margin="0,0,0,2" FontWeight="SemiBold"/>
+                        <DatePicker x:Name="dpStartDate" Padding="5" SelectedDateChanged="DpDate_SelectedDateChanged"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                        <TextBlock Text="Date de Fin Demandée :" Margin="0,0,0,2" FontWeight="SemiBold"/>
+                        <DatePicker x:Name="dpEndDate" Padding="5" SelectedDateChanged="DpDate_SelectedDateChanged"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Montants (TotalAmount et DepositAmount) -->
+                <Grid Margin="0,5,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock Text="Montant Total (€) (TotalAmount) :" Margin="0,5,0,2" FontWeight="SemiBold"/>
+                        <TextBox x:Name="txtTotalCost"  
+                                 Padding="5" 
+                                 Background="#FFFACD" 
+                                 ToolTip="Montant total de la réservation."/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                        <TextBlock Text="Montant de Dépôt (€) (DepositAmount) :" Margin="0,5,0,2" FontWeight="SemiBold"/>
+                        <TextBox x:Name="txtDepositAmount" 
+                                 Padding="5" 
+                                 Background="#FFFACD" 
+                                 ToolTip="Montant de l'acompte ou de la caution."/>
+                    </StackPanel>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+
+        <!-- Ligne 2 : Boutons d'Action -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+            <Button x:Name="BtnCreateReservation" 
+                    Content="Créer Réservation" 
+                    Click="BtnCreateReservation_Click"
+                    Background="#4CAF50" Foreground="White" 
+                    Padding="15,8" Margin="10,5" FontWeight="Bold" Width="180"/>
+
+            <Button x:Name="BtnClear" 
+                    Content="Effacer Formulaire" 
+                    Click="BtnClear_Click"
+                    Background="#9E9E9E" Foreground="White" 
+                    Padding="15,8" Margin="10,5" FontWeight="Bold" Width="180"/>
+        </StackPanel>
+
+        <!-- Ligne 3 : DataGrid des Réservations Actives (pour le suivi) -->
+        <TextBlock Grid.Row="3" 
+                   Text="Réservations Actives" 
+                   FontSize="16" 
+                   FontWeight="SemiBold" 
+                   Margin="0,0,0,10"
+                   Foreground="#007ACC"/>
+        <DataGrid Grid.Row="3" 
+                  x:Name="dgvActiveReservations"
+                  ItemsSource="{Binding ActiveReservations}"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  Background="#F0F8FF"
+                  BorderBrush="#CCCCCC"
+                  BorderThickness="1"/>
+    </Grid>
+</Window>
