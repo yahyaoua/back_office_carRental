@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CarRental.Desktop.WPF")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+04e098c63a89a003ada0fe859e8d8aa4a23b7df2")]
 [assembly: System.Reflection.AssemblyProductAttribute("CarRental.Desktop.WPF")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CarRental.Desktop.WPF")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

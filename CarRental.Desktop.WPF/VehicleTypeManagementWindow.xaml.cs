@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-// Dans CarRental.Desktop.WPF/VehicleTypeManagementWindow.xaml.cs
-
-using CarRental2.Core.Interfaces;
+﻿using CarRental2.Core.Interfaces;
 using CarRental2.Core.Entities;
 using System;
 using System.Linq;
@@ -15,21 +11,21 @@ namespace CarRental.Desktop.WPF
 {
     public partial class VehicleTypeManagementWindow : Window
     {
-        // Injection du IUnitOfWork pour accéder aux Repositories
         private readonly IUnitOfWork _unitOfWork;
+        // Utilisez une propriété pour le DataContext si possible, sinon conservez le champ privé.
         private VehicleType? _selectedVehicleType;
 
-        // Constructeur : Injection de Dépendances
         public VehicleTypeManagementWindow(IUnitOfWork unitOfWork)
         {
             InitializeComponent();
             _unitOfWork = unitOfWork;
             this.Loaded += VehicleTypeManagementWindow_Loaded;
+            // Optionnel : Configurer le DataContext si vous utilisez le Binding XAML
+            // this.DataContext = this; 
         }
 
         private async void VehicleTypeManagementWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // Nous chargeons les types de véhicules en utilisant IUnitOfWork.VehicleTypes
             await LoadVehicleTypesAsync();
         }
 
@@ -40,10 +36,9 @@ namespace CarRental.Desktop.WPF
         {
             try
             {
-                // NOTE : Assurez-vous que IUnitOfWork.VehicleTypes est correctement implémenté dans votre IUnitOfWork
-                // et qu'il retourne IGenericRepository<VehicleType>.
                 var vehicleTypes = await _unitOfWork.VehicleTypes.GetAllAsync();
 
+                // L'ItemsSource est mise à jour avec la liste
                 dgvVehicleTypes.ItemsSource = vehicleTypes.ToList();
             }
             catch (Exception ex)
@@ -67,11 +62,11 @@ namespace CarRental.Desktop.WPF
             var newVehicleType = new VehicleType
             {
                 VehicleTypeId = Guid.NewGuid(),
-                // Utilisation des propriétés de votre modèle : Name et Description
                 Name = txtVehicleTypeName.Text,
-                Description = "", // Description est souvent optionnelle à l'ajout rapide
+                // Lier le nouveau champ Description
+                Description = txtVehicleTypeDescription.Text,
 
-                // Initialisation des collections (selon votre entité)
+                // Initialisation des collections (pour éviter les erreurs EF Core)
                 Vehicles = new List<Vehicle>(),
                 Tariffs = new List<Tariff>()
             };
@@ -97,11 +92,10 @@ namespace CarRental.Desktop.WPF
             }
             if (!ValidateInput()) return;
 
-            // Mise à jour de la propriété Name
+            // Mise à jour des propriétés
             _selectedVehicleType.Name = txtVehicleTypeName.Text;
-
-            // Si vous ajoutez une zone de texte pour la Description plus tard, mettez-la à jour ici
-            // _selectedVehicleType.Description = txtVehicleTypeDescription.Text; 
+            // Mise à jour de la nouvelle propriété Description
+            _selectedVehicleType.Description = txtVehicleTypeDescription.Text;
 
             _unitOfWork.VehicleTypes.Update(_selectedVehicleType);
             await _unitOfWork.CompleteAsync();
@@ -129,7 +123,6 @@ namespace CarRental.Desktop.WPF
             {
                 try
                 {
-                    // Utilisation de la méthode DeleteAsync(Guid id)
                     await _unitOfWork.VehicleTypes.DeleteAsync(_selectedVehicleType.VehicleTypeId);
                     await _unitOfWork.CompleteAsync();
 
@@ -155,7 +148,8 @@ namespace CarRental.Desktop.WPF
             {
                 _selectedVehicleType = vehicleType;
                 txtVehicleTypeName.Text = vehicleType.Name;
-                // Si vous avez un champ Description: txtVehicleTypeDescription.Text = vehicleType.Description;
+                // Liaison du champ Description lors de la sélection
+                txtVehicleTypeDescription.Text = vehicleType.Description;
                 return;
             }
 
@@ -169,7 +163,9 @@ namespace CarRental.Desktop.WPF
         private void ClearForm(bool clearSelection = true)
         {
             txtVehicleTypeName.Text = string.Empty;
-            // Si vous avez un champ Description: txtVehicleTypeDescription.Text = string.Empty;
+            // Effacer le champ Description
+            txtVehicleTypeDescription.Text = string.Empty;
+
             if (clearSelection)
             {
                 _selectedVehicleType = null;
@@ -190,6 +186,33 @@ namespace CarRental.Desktop.WPF
                 return false;
             }
             return true;
+        }
+
+        // =======================================================
+        // Masquage des colonnes (Implémentation)
+        // =======================================================
+        private void DgvVehicleTypes_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            // 1. Masquer les colonnes de navigation et les IDs
+            if (e.PropertyName == "VehicleTypeId")
+            {
+                e.Column.Visibility = Visibility.Collapsed;
+            }
+            else if (e.PropertyName == "Vehicles" ||       // Collection de navigation
+                     e.PropertyName == "Tariffs")          // Collection de navigation
+            {
+                e.Column.Visibility = Visibility.Collapsed;
+            }
+
+            // 2. Renommage pour la lisibilité
+            else if (e.PropertyName == "Name")
+            {
+                e.Column.Header = "Nom du Type";
+            }
+            else if (e.PropertyName == "Description")
+            {
+                e.Column.Header = "Description du Type";
+            }
         }
     }
 }

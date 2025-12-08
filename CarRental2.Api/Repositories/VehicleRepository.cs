@@ -88,5 +88,13 @@ namespace CarRental.Api.Repositories
                 .Include(v => v.Maintenances)
                 .FirstOrDefaultAsync();
         }
+        public async Task<VehicleImage> GetPrimaryImageAsync(Guid vehicleId)
+        {
+            // Nous utilisons le DbContext pour interroger directement la table VehicleImages
+            // et nous cherchons la première image qui est marquée comme principale pour ce véhicule.
+            return await _dbContext.VehicleImages
+                .Where(img => img.VehicleId == vehicleId && img.IsPrimary)
+                .FirstOrDefaultAsync(); // On prend le premier (et unique, en théorie)
+        }
     }
 }

@@ -2,6 +2,8 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+// Si votre entité hérite de BaseEntity (comme dans mon exemple précédent)
+// using CarRental2.Core.Entities.Base; 
 
 namespace CarRental2.Core.Entities
 {
@@ -9,6 +11,14 @@ namespace CarRental2.Core.Entities
     {
         // 🔑 PK: MaintenanceId (GUID)
         public Guid MaintenanceId { get; set; }
+
+        // NOUVELLE PROPRIÉTÉ CALCULÉE (CORRECTION DU PROBLÈME ID PARTIEL)
+        /// <summary>
+        /// Retourne l'ID de maintenance tronqué pour l'affichage (ex: '26a14e07...').
+        /// </summary>
+        public string MaintenanceIdShort => MaintenanceId.ToString().Length >= 8
+            ? MaintenanceId.ToString().Substring(0, 8) + "..."
+            : MaintenanceId.ToString();
 
         // 🔗 FK: VehicleId (Le véhicule concerné par l'entretien)
         public Guid VehicleId { get; set; }

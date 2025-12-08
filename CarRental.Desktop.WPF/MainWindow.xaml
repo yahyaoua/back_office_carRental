@@ -9,9 +9,7 @@
         Width="1000"
         FontFamily="Segoe UI">
 
-    <!-- Définition des styles de base dans la fenêtre pour éviter l'erreur de ressource non trouvée -->
     <Window.Resources>
-        <!-- Style de base pour les boutons d'action (couleur principale) -->
         <Style x:Key="ActionButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#007ACC"/>
             <Setter Property="Foreground" Value="White"/>
@@ -38,7 +36,6 @@
             </Setter>
         </Style>
 
-        <!-- Style de base pour les boutons secondaires (neutre) -->
         <Style x:Key="SecondaryButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#E0E0E0"/>
             <Setter Property="Foreground" Value="#333333"/>
@@ -65,7 +62,6 @@
             </Setter>
         </Style>
 
-        <!-- Style Danger pour le bouton de suppression (non utilisé ici mais souvent utile) -->
         <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
             <Setter Property="Background" Value="#DC3545"/>
             <Setter Property="Template">
@@ -92,12 +88,9 @@
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
-            <!-- Colonne 0 : Menu de Navigation (Largeur fixe) -->
             <ColumnDefinition Width="*"/>
-            <!-- Colonne 1 : Zone d'Affichage du Contenu Principal -->
         </Grid.ColumnDefinitions>
 
-        <!-- Colonne 0 : Menu de Navigation / Gestion -->
         <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,0,30,0">
 
             <TextBlock Text="Menu Principal" 
@@ -106,58 +99,44 @@
                        Margin="0,0,0,15"
                        Foreground="#007ACC"/>
 
-            <!-- Section Opérations Quotidiennes -->
             <GroupBox Header="Opérations Quotidiennes" Margin="0,10,0,10" BorderBrush="#007ACC" FontWeight="SemiBold">
                 <StackPanel Orientation="Vertical" Margin="10">
 
-                    <!-- 1. Création de Réservation -->
                     <Button Content="Créer Nouvelle Réservation" 
                             x:Name="BtnOpenReservationCreation"
                             Height="35" 
                             Style="{StaticResource ActionButtonStyle}"
                             Click="BtnOpenReservationCreation_Click"/>
 
-                   
-
-                    <!-- 3. Gestion des Paiements -->
                     <Button Content="Gérer les Paiements" 
                             x:Name="BtnOpenPaymentManagement"
                             Height="35" 
                             Style="{StaticResource SecondaryButtonStyle}"
                             Click="BtnOpenPaymentManagement_Click"/>
-
-                    
                 </StackPanel>
             </GroupBox>
 
-            <!-- Section Configuration & Inventaire -->
             <GroupBox Header="Configuration &amp; Inventaire" Margin="0,10,0,10" BorderBrush="#FFC107" FontWeight="SemiBold">
                 <StackPanel Orientation="Vertical" Margin="10">
 
-                 
-   
-                    <!-- 2. Gérer Types de Véhicules -->
                     <Button x:Name="btnVehicleTypeManagement" 
                             Content="Gérer Types de Véhicules" 
                             Height="35" 
                             Style="{StaticResource SecondaryButtonStyle}"
                             Click="BtnVehicleTypeManagement_Click"/>
 
-                    <!-- 3. Gérer les Tarifs -->
                     <Button x:Name="btnTariffManagement" 
                             Content="Gérer les Tarifs" 
                             Height="35" 
                             Style="{StaticResource SecondaryButtonStyle}"
                             Click="BtnTariffManagement_Click"/>
 
-                    <!-- 4. Gérer les Véhicules -->
                     <Button x:Name="btnVehicleManagement" 
                             Content="Gérer les Véhicules" 
                             Height="35" 
                             Style="{StaticResource SecondaryButtonStyle}"
                             Click="BtnVehicleManagement_Click"/>
 
-                    <!-- 5. Gérer les Clients -->
                     <Button x:Name="btnCustomerManagement" 
                             Content="Gérer les Clients" 
                             Height="35" 
@@ -166,17 +145,20 @@
                 </StackPanel>
             </GroupBox>
 
-            <!-- Section Rapports & Maintenance -->
             <GroupBox Header="Rapports &amp; Maintenance" Margin="0,10,0,10" BorderBrush="#4CAF50" FontWeight="SemiBold">
                 <StackPanel Orientation="Vertical" Margin="10">
                     <Button Content="Rapports Financiers" Height="35" Style="{StaticResource SecondaryButtonStyle}"/>
-                    <Button Content="Planning de Maintenance" Height="35" Style="{StaticResource SecondaryButtonStyle}"/>
+
+                    <Button x:Name="BtnOpenMaintenanceManagement" 
+                            Content="Planning de Maintenance" 
+                            Height="35" 
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Click="BtnOpenMaintenanceManagement_Click"/>
                 </StackPanel>
             </GroupBox>
 
         </StackPanel>
 
-        <!-- Colonne 1 : Zone d'Affichage du Contenu Principal -->
         <Border Grid.Column="1" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="5" Padding="20" Background="#FFFFFF">
             <StackPanel>
                 <TextBlock Text="Bienvenue dans l'Application de Gestion de Location de Voitures" 
@@ -190,14 +172,12 @@
                            Foreground="#666666"
                            Margin="0,0,0,30"/>
 
-                <!-- Statistiques -->
                 <TextBlock Text="Statistiques Rapides :" 
                            FontSize="18" 
                            FontWeight="Bold" 
                            Margin="0,0,0,15"
                            Foreground="#007ACC"/>
 
-                <!-- Conteneur de Statistiques (Grid pour une meilleure disposition) -->
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -205,7 +185,6 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Stat 1: Total Véhicules -->
                     <Border Grid.Column="0" Background="#E3F2FD" BorderBrush="#007ACC" BorderThickness="1" Padding="15" Margin="0,0,15,10" CornerRadius="8">
                         <StackPanel>
                             <TextBlock Text="Total Véhicules" FontSize="12" Foreground="#007ACC"/>
@@ -213,7 +192,6 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Stat 2: Véhicules Disponibles -->
                     <Border Grid.Column="1" Background="#E8F5E9" BorderBrush="#4CAF50" BorderThickness="1" Padding="15" Margin="0,0,15,10" CornerRadius="8">
                         <StackPanel>
                             <TextBlock Text="Véhicules Disponibles" FontSize="12" Foreground="#4CAF50"/>
@@ -221,7 +199,6 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Stat 3: Réservations en Cours -->
                     <Border Grid.Column="2" Background="#FFF3E0" BorderBrush="#FFC107" BorderThickness="1" Padding="15" CornerRadius="8">
                         <StackPanel>
                             <TextBlock Text="Réservations en Cours" FontSize="12" Foreground="#FFC107"/>

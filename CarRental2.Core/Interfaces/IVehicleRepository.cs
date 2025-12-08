@@ -15,5 +15,6 @@ namespace CarRental2.Core.Interfaces
 
         // Exemple : obtenir un véhicule avec ses images et son type
         Task<Vehicle> GetVehicleWithDetailsAsync(Guid vehicleId);
+        Task<VehicleImage> GetPrimaryImageAsync(Guid vehicleId);
     }
 }

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CarRental.Desktop.WPF"
         mc:Ignorable="d"
         Title="Gestion des Paiements" 
         Height="800" 
@@ -10,17 +11,16 @@
         WindowStartupLocation="CenterScreen"
         FontFamily="Segoe UI">
 
+    
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Titre -->
             <RowDefinition Height="Auto"/>
-            <!-- Formulaire d'Enregistrement de Paiement -->
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <!-- DataGrid des Paiements -->
         </Grid.RowDefinitions>
 
-        <!-- Ligne 0 : Titre -->
         <TextBlock Grid.Row="0" 
                    Text="Gestion et Enregistrement des Paiements" 
                    FontSize="28" 
@@ -29,7 +29,6 @@
                    Foreground="#007ACC"
                    HorizontalAlignment="Center"/>
 
-        <!-- Ligne 1 : Formulaire d'Enregistrement de Paiement -->
         <Border Grid.Row="1" 
                 BorderBrush="#2ECC71" 
                 BorderThickness="1" 
@@ -41,27 +40,40 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
-                    <!-- Saisie -->
                     <ColumnDefinition Width="Auto"/>
-                    <!-- Séparateur -->
                     <ColumnDefinition Width="*"/>
-                    <!-- Synthèse de la Réservation -->
                 </Grid.ColumnDefinitions>
 
-                <!-- Colonne Gauche : Saisie du Paiement -->
                 <StackPanel Grid.Column="0" Margin="0,0,20,0">
+
+                    <TextBlock Text="Sélectionner le Client :" Margin="0,0,0,2" FontWeight="SemiBold"/>
+                    <ComboBox x:Name="cmbClient"
+                              ItemsSource="{Binding AvailableClients}"
+                              SelectedValuePath="ClientId"
+                              SelectionChanged="CmbClient_SelectionChanged"
+                              Margin="0,0,0,15" Padding="5"
+                              ToolTip="Filtre les réservations pour n'afficher que celles de ce client.">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run Text="{Binding LastName, Mode=OneWay, StringFormat='{} {0}'}"/>
+                                    <Run Text="{Binding FirstName, Mode=OneWay, StringFormat=' \{0\}'}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
                     <TextBlock Text="Sélectionner la Réservation :" Margin="0,0,0,2" FontWeight="SemiBold"/>
                     <ComboBox x:Name="cmbReservation" 
-                              ItemsSource="{Binding AvailableReservations}"
+                              ItemsSource="{Binding FilteredReservations}"
                               SelectedValuePath="ReservationId"
                               Margin="0,0,0,15" Padding="5"
                               SelectionChanged="CmbReservation_SelectionChanged"
                               ToolTip="Sélectionnez la réservation à laquelle ce paiement est lié.">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <!-- Affiche un résumé de la réservation -->
                                 <TextBlock>
-                                    <Run Text="{Binding ReservationId, StringFormat='Rés. \{0:N4}'}"/>
+                                    <Run Text="{Binding ReservationId}"/>
                                     <Run Text=" - Du "/>
                                     <Run Text="{Binding RequestedStart, StringFormat='d'}"/>
                                     <Run Text=" au "/>
@@ -71,7 +83,6 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <!-- Montant et Méthode -->
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -91,17 +102,24 @@
                         </StackPanel>
                     </Grid>
 
-                    <Button x:Name="BtnRecordPayment" 
-                            Content="💵 Enregistrer le Paiement" 
-                            Click="BtnRecordPayment_Click"
-                            Background="#2ECC71" Foreground="White" 
-                            Padding="15,8" FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button x:Name="BtnRecordPayment" 
+                                Content="💵 Enregistrer le Paiement" 
+                                Click="BtnRecordPayment_Click"
+                                Background="#2ECC71" Foreground="White" 
+                                Padding="15,8" FontWeight="Bold"/>
+
+                        <Button x:Name="BtnClearForm" 
+                                Content="🗑️ Effacer/Nouveau" 
+                                Click="BtnClearForm_Click"
+                                Margin="10,0,0,0"
+                                Background="#9E9E9E" Foreground="White" 
+                                Padding="15,8" FontWeight="Bold"/>
+                    </StackPanel>
                 </StackPanel>
 
-                <!-- Colonne Milieu : Séparateur Visuel -->
                 <Rectangle Grid.Column="1" Width="1" Fill="#CCCCCC" Margin="10,0"/>
 
-                <!-- Colonne Droite : Synthèse des Montants de la Réservation -->
                 <StackPanel Grid.Column="2" Margin="20,0,0,0">
                     <TextBlock Text="Synthèse de la Réservation Sélectionnée" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
 
@@ -137,15 +155,30 @@
             </Grid>
         </Border>
 
-        <!-- Ligne 2 : DataGrid de l'Historique des Paiements -->
-        <TextBlock Grid.Row="2" 
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <Button x:Name="BtnUpdatePayment" 
+                    Content=" Modifier le Paiement Sélectionné" 
+                    Click="BtnUpdatePayment_Click"
+                    IsEnabled="False"
+                    Background="#FFC107" Foreground="Black" 
+                    Padding="15,8" Margin="10,0" FontWeight="Bold"/>
+
+            <Button x:Name="BtnDeletePayment" 
+                    Content=" Supprimer le Paiement Sélectionné" 
+                    Click="BtnDeletePayment_Click"
+                    IsEnabled="False"
+                    Background="#F44336" Foreground="White" 
+                    Padding="15,8" Margin="10,0" FontWeight="Bold"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="3" 
                    Text="Historique des Paiements Enregistrés" 
                    FontSize="18" 
                    FontWeight="SemiBold" 
                    Margin="0,10,0,10"
                    Foreground="#007ACC"/>
 
-        <DataGrid Grid.Row="2" 
+        <DataGrid Grid.Row="3" 
                   x:Name="dgvPayments"
                   ItemsSource="{Binding Payments}"
                   IsReadOnly="True"
@@ -154,17 +187,21 @@
                   CanUserDeleteRows="False"
                   Background="#FFFFFF"
                   BorderBrush="#CCCCCC"
-                  BorderThickness="1">
+                  BorderThickness="1"
+                  SelectionChanged="DgvPayments_SelectionChanged">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Paiement ID (Partiel)" Binding="{Binding PaymentId, StringFormat={}{0:N4}}" Width="150"/>
-                <DataGridTextColumn Header="Réservation ID (Partiel)" Binding="{Binding ReservationId, StringFormat={}{0:N4}}" Width="150"/>
+                <DataGridTextColumn Header="Paiement ID (Partiel)" 
+                    Binding="{Binding PaymentId}" 
+                    Width="150"/>
+
+                <DataGridTextColumn Header="Réservation ID (Partiel)" 
+                    Binding="{Binding ReservationId}" 
+                    Width="150"/>
                 <DataGridTextColumn Header="Montant (€)" Binding="{Binding Amount, StringFormat=\{0:N2\}}" Width="120"/>
                 <DataGridTextColumn Header="Date" Binding="{Binding PaymentDate, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Width="160"/>
                 <DataGridTextColumn Header="Méthode" Binding="{Binding PaymentMethod}" Width="120"/>
                 <DataGridTextColumn Header="Statut" Binding="{Binding Status}" Width="100"/>
-
-                <!-- On pourrait ajouter une colonne pour le Client via EF Core Includes si l'UoW le supporte -->
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

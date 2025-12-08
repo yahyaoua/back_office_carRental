@@ -1,13 +1,19 @@
-﻿// Dans CarRental.Api/Repositories/GenericRepository.cs
+﻿// Fichier: CarRental.Api/Repositories/GenericRepository.cs
 
 using CarRental2.Core.Interfaces;
 using CarRental.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using System;
+// Ajouté pour supporter les méthodes .Include() dans GetAllAsync
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace CarRental.Api.Repositories
 {
-    // T est le type d'entité (ex: Vehicle, Client)
+    // Assurez-vous que l'interface IGenericRepository<T> a été mise à jour dans le projet CarRental2.Core.
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly ApplicationDbContext _dbContext;
@@ -16,54 +22,72 @@ namespace CarRental.Api.Repositories
         public GenericRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _dbSet = dbContext.Set<T>(); // Obtient le DbSet correspondant à l'entité T
+            _dbSet = dbContext.Set<T>();
         }
+
+        // --- READ ---
 
         public async Task<T> GetByIdAsync(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        // CORRECTION FINALE : Implémentation de GetAllAsync pour supporter le filtre et le Eager Loading (Include).
+        public async Task<IReadOnlyList<T>> GetAllAsync(
+            Expression<Func<T, bool>> filter = null,
+            // Utilisez Func<IQueryable<T>, IQueryable<T>> pour être compatible avec l'interface Core,
+            // même si l'implémentation EF Core utilise IIncludableQueryable en interne.
+            Func<IQueryable<T>, IQueryable<T>> include = null)
         {
-            return await _dbSet.ToListAsync();
+            IQueryable<T> query = _dbSet;
+
+            // 1. Applique le Eager Loading
+            if (include != null)
+            {
+                // Appelle la fonction lambda qui contient les .Include(s)
+                query = include(query);
+            }
+
+            // 2. Applique le filtre
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // 3. Exécute la requête
+            return await query.ToListAsync();
         }
 
-        // Implémentation du filtre FindAsync
-        public async Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _dbSet.Where(predicate).ToListAsync();
-        }
+        // --- CREATE ---
 
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
-            // NOTE: Nous n'appelons pas SaveChangesAsync ici. 
-            // C'est le rôle de l'IUnitOfWork (CompleteAsync) de le faire.
         }
+
+        // --- UPDATE ---
 
         public void Update(T entity)
         {
             _dbSet.Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
-            // NOTE: Le changement d'état est suivi par EF Core jusqu'à CompleteAsync.
         }
+
+        // --- DELETE ---
 
         public void Delete(T entity)
         {
             _dbSet.Remove(entity);
         }
+
         public async Task DeleteAsync(Guid id)
         {
-            // 1. Trouver l'entité par son ID
             var entity = await _dbSet.FindAsync(id);
 
-            // 2. Supprimer l'entité si elle existe
             if (entity != null)
             {
                 _dbSet.Remove(entity);
             }
-            // Note : Le CompleteAsync() est appelé dans IUnitOfWork.CompleteAsync() par le formulaire.
         }
     }
 }

@@ -12,10 +12,12 @@ namespace CarRental.Api.Services
     public class ReservationService : IReservationService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IVehicleService _vehicleService;
 
-        public ReservationService(IUnitOfWork unitOfWork)
+        public ReservationService(IUnitOfWork unitOfWork, IVehicleService vehicleService)
         {
             _unitOfWork = unitOfWork;
+            _vehicleService = vehicleService;
         }
 
         public async Task<decimal> CalculateTotalAmountAsync(Guid vehicleTypeId, DateTime start, DateTime end)
@@ -23,13 +25,12 @@ namespace CarRental.Api.Services
             if (start >= end) return 0;
             int totalDays = (int)Math.Ceiling((end - start).TotalDays);
 
-            // Utilisation de PricePerDay (Tariff.cs) et application des dates de validité
-            var validTariffs = await _unitOfWork.Tariffs.FindAsync(t =>
+            // CORRECTION : Remplacement de FindAsync par GetAllAsync(filter)
+            var validTariffs = await _unitOfWork.Tariffs.GetAllAsync(t =>
                 t.VehicleTypeId == vehicleTypeId &&
                 t.StartDate <= start &&
                 t.EndDate >= end
             );
-
             // Hypothèse : Prendre le tarif avec le plus grand PricePerDay si plusieurs s'appliquent (ou le premier)
             var tariff = validTariffs.OrderByDescending(t => t.PricePerDay).FirstOrDefault();
 
@@ -45,16 +46,21 @@ namespace CarRental.Api.Services
 
         public async Task<Reservation> CreateReservationAsync(Reservation reservation)
         {
-            bool isAvailable = await _unitOfWork.Reservations.IsVehicleAvailableAsync(
-                reservation.VehicleId.Value,
-                reservation.RequestedStart,
-                reservation.RequestedEnd);
+            // 1. Vérifiez et extrayez l'ID du véhicule au tout début
+            if (!reservation.VehicleId.HasValue)
+            {
+                // On ne peut pas créer de réservation sans véhicule ID
+                return null;
+            }
 
-            if (!isAvailable) return null;
+            // CORRECTION CS0103 : Déclare la variable vehicleId pour qu'elle soit accessible partout
+            Guid vehicleId = reservation.VehicleId.Value;
 
+            // 2. Calcul du montant si nécessaire
             if (reservation.TotalAmount == 0)
             {
-                var vehicle = await _unitOfWork.Vehicles.GetByIdAsync(reservation.VehicleId.Value);
+                // Utilisation de la variable locale vehicleId
+                var vehicle = await _unitOfWork.Vehicles.GetByIdAsync(vehicleId);
                 if (vehicle == null) return null;
 
                 reservation.TotalAmount = await CalculateTotalAmountAsync(
@@ -63,6 +69,30 @@ namespace CarRental.Api.Services
                     reservation.RequestedEnd);
             }
 
+            // 3. Vérification de la disponibilité du véhicule par conflit de RÉSÉRVATION (logique existante)
+            bool isAvailableByReservation = await _unitOfWork.Reservations.IsVehicleAvailableAsync(
+                vehicleId,
+                reservation.RequestedStart,
+                reservation.RequestedEnd);
+
+            if (!isAvailableByReservation)
+            {
+                return null; // Conflit avec une autre réservation
+            }
+
+            // 4. Vérification du conflit de MAINTENANCE PLANIFIÉE
+            bool hasMaintenanceConflict = await _vehicleService.HasMaintenanceConflictAsync(
+                vehicleId, // <-- Utilisation de la variable locale 'vehicleId' corrigée
+                reservation.RequestedStart,
+                reservation.RequestedEnd);
+
+            if (hasMaintenanceConflict)
+            {
+                // Retourne null si la période de réservation chevauche une maintenance future.
+                return null;
+            }
+
+            // 5. Création de la réservation
             reservation.Status = "Confirmed";
             await _unitOfWork.Reservations.AddAsync(reservation);
             await _unitOfWork.CompleteAsync();

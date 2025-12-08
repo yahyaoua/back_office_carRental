@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Créer Nouvelle Réservation" 
+        Title="Gestion des Réservations" 
         Height="800"
         Width="650"
         WindowStartupLocation="CenterScreen"
@@ -13,25 +13,19 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Titre -->
             <RowDefinition Height="Auto"/>
-            <!-- Formulaire de Réservation -->
             <RowDefinition Height="Auto"/>
-            <!-- Boutons -->
             <RowDefinition Height="*"/>
-            <!-- DataGrid des Réservations Actives -->
         </Grid.RowDefinitions>
 
-        <!-- Ligne 0 : Titre -->
         <TextBlock Grid.Row="0" 
-                   Text="Nouvelle Réservation" 
+                   Text="Gestion des Réservations" 
                    FontSize="24" 
                    FontWeight="Bold" 
                    Margin="0,0,0,20"
                    Foreground="#007ACC"
                    HorizontalAlignment="Center"/>
 
-        <!-- Ligne 1 : Formulaire de Saisie -->
         <Border Grid.Row="1" 
                 BorderBrush="#007ACC" 
                 BorderThickness="1" 
@@ -41,17 +35,13 @@
                 Margin="0,0,0,20">
 
             <StackPanel>
-                <!-- ComboBox Client -->
                 <TextBlock Text="Client (Sélection) :" Margin="0,5,0,2" FontWeight="SemiBold"/>
                 <ComboBox x:Name="cmbClient" 
                           ItemsSource="{Binding AvailableClients}"
                           SelectedValuePath="ClientId"
-                          Margin="0,0,0,10" Padding="5"
-                          ToolTip="Liste des clients réels chargés depuis la base de données.">
-                    <!-- CORRECTION: Suppression de DisplayMemberPath pour utiliser seulement l'ItemTemplate -->
+                          Margin="0,0,0,10" Padding="5">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <!-- Supposons que Client a FirstName et LastName -->
                             <TextBlock>
                                 <Run Text="{Binding LastName, Mode=OneWay}"/>
                                 <Run Text=" "/>
@@ -61,18 +51,14 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <!-- ComboBox Véhicule -->
                 <TextBlock Text="Véhicule (Sélection) :" Margin="0,5,0,2" FontWeight="SemiBold"/>
                 <ComboBox x:Name="cmbVehicle" 
                           ItemsSource="{Binding AvailableVehicles}"
                           SelectedValuePath="VehicleId"
                           Margin="0,0,0,10" Padding="5"
-                          SelectionChanged="CmbVehicle_SelectionChanged"
-                          ToolTip="Liste des véhicules réels disponibles.">
-                    <!-- CORRECTION: Suppression de DisplayMemberPath pour utiliser seulement l'ItemTemplate -->
+                          SelectionChanged="CmbVehicle_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <!-- Supposons que Vehicle a PlateNumber, Make, Model, et BaseRatePerDay -->
                             <TextBlock>
                                 <Run Text="{Binding PlateNumber, Mode=OneWay}"/>
                                 <Run Text=" - "/>
@@ -87,7 +73,6 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <!-- Dates de Début et de Fin (RequestedStart/RequestedEnd) -->
                 <Grid Margin="0,5,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -105,7 +90,6 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- Montants (TotalAmount et DepositAmount) -->
                 <Grid Margin="0,5,0,15">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -114,40 +98,44 @@
 
                     <StackPanel Grid.Column="0" Margin="0,0,10,0">
                         <TextBlock Text="Montant Total (€) (TotalAmount) :" Margin="0,5,0,2" FontWeight="SemiBold"/>
-                        <TextBox x:Name="txtTotalCost"  
+                        <TextBox x:Name="txtTotalCost" 
                                  Padding="5" 
                                  Background="#FFFACD" 
-                                 ToolTip="Montant total de la réservation."/>
+                                 IsReadOnly="True"
+                                 ToolTip="Montant total de la réservation (calculé automatiquement)."/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                        <TextBlock Text="Montant de Dépôt (€) (DepositAmount) :" Margin="0,5,0,2" FontWeight="SemiBold"/>
-                        <TextBox x:Name="txtDepositAmount" 
-                                 Padding="5" 
-                                 Background="#FFFACD" 
-                                 ToolTip="Montant de l'acompte ou de la caution."/>
-                    </StackPanel>
                 </Grid>
 
             </StackPanel>
         </Border>
 
-        <!-- Ligne 2 : Boutons d'Action -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
             <Button x:Name="BtnCreateReservation" 
-                    Content="Créer Réservation" 
+                    Content="✅ Créer" 
                     Click="BtnCreateReservation_Click"
                     Background="#4CAF50" Foreground="White" 
-                    Padding="15,8" Margin="10,5" FontWeight="Bold" Width="180"/>
+                    Padding="15,8" Margin="10,5" FontWeight="Bold" Width="100"/>
+
+            <Button x:Name="BtnUpdateReservation" 
+                    Content="📝 Modifier" 
+                    Click="BtnUpdateReservation_Click"
+                    Background="#FFC107" Foreground="Black" 
+                    Padding="15,8" Margin="10,5" FontWeight="Bold" Width="100"/>
+
+            <Button x:Name="BtnDeleteReservation" 
+                    Content="❌ Supprimer" 
+                    Click="BtnDeleteReservation_Click"
+                    Background="#F44336" Foreground="White" 
+                    Padding="15,8" Margin="10,5" FontWeight="Bold" Width="100"/>
 
             <Button x:Name="BtnClear" 
-                    Content="Effacer Formulaire" 
+                    Content="🗑️ Effacer" 
                     Click="BtnClear_Click"
                     Background="#9E9E9E" Foreground="White" 
-                    Padding="15,8" Margin="10,5" FontWeight="Bold" Width="180"/>
+                    Padding="15,8" Margin="10,5" FontWeight="Bold" Width="100"/>
         </StackPanel>
 
-        <!-- Ligne 3 : DataGrid des Réservations Actives (pour le suivi) -->
         <TextBlock Grid.Row="3" 
                    Text="Réservations Actives" 
                    FontSize="16" 
@@ -163,6 +151,9 @@
                   CanUserDeleteRows="False"
                   Background="#F0F8FF"
                   BorderBrush="#CCCCCC"
-                  BorderThickness="1"/>
+                  BorderThickness="1"
+                  SelectionMode="Single"
+                  SelectionChanged="DgvActiveReservations_SelectionChanged"
+                  AutoGeneratingColumn="DgvActiveReservations_AutoGeneratingColumn"/>
     </Grid>
 </Window>

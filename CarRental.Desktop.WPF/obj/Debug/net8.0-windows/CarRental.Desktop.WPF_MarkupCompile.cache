@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\ouaabou\source\repos\CarRental2\CarRental.Desktop.WPF\App.xaml
-7-1254144731
+8-1862241427
 
-1037639167
+13-1905243883
 362-347216049
-ClientManagementWindow.xaml;MainWindow.xaml;PaymentManagementWindow.xaml;ReservationCreationWindow.xaml;TariffManagementWindow.xaml;VehicleManagementWindow.xaml;VehicleTypeManagementWindow.xaml;
+ClientManagementWindow.xaml;MaintenanceManagementWindow.xaml;MainWindow.xaml;PaymentManagementWindow.xaml;ReservationCreationWindow.xaml;TariffManagementWindow.xaml;VehicleManagementWindow.xaml;VehicleTypeManagementWindow.xaml;
 
 False
 

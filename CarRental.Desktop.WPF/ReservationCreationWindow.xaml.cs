@@ -7,12 +7,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Windows.Data; // Nécessaire pour les DataGridTextColumn
 
 namespace CarRental.Desktop.WPF
 {
     public partial class ReservationCreationWindow : Window
     {
         private readonly IUnitOfWork _unitOfWork;
+
+        // Stocke la réservation actuellement sélectionnée pour les opérations Modifier/Supprimer
+        private Reservation _selectedReservation;
 
         // Collections Observables pour les liaisons de données
         public ObservableCollection<Client> AvailableClients { get; set; } = new ObservableCollection<Client>();
@@ -26,18 +30,16 @@ namespace CarRental.Desktop.WPF
             _unitOfWork = unitOfWork;
             this.DataContext = this;
             this.Loaded += ReservationCreationWindow_Loaded;
+
+            // Assurez-vous que le DataGrid existe et a les événements
+            // dgvActiveReservations.SelectionChanged += DgvActiveReservations_SelectionChanged; 
+            // dgvActiveReservations.AutoGeneratingColumn += DgvActiveReservations_AutoGeneratingColumn;
         }
 
         private async void ReservationCreationWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await LoadDataAsync();
-            // Définir les dates par défaut
-            // NOTE: Assurez-vous que les DatePickers dans le XAML ont les noms `dpStartDate` et `dpEndDate`
-            // pour que ces lignes compilent correctement.
-            // Si ces noms ne sont pas encore dans le XAML, cette partie échouera à la compilation XAML.
-            // En supposant que le XAML est à jour.
-            // dpStartDate.SelectedDate = DateTime.Today;
-            // dpEndDate.SelectedDate = DateTime.Today.AddDays(7);
+            ClearForm(); // Réinitialiser pour s'assurer que le mode est 'Création' initialement
         }
 
         // =======================================================
@@ -51,8 +53,7 @@ namespace CarRental.Desktop.WPF
         {
             try
             {
-                // 1. Chargement des Clients (pour le ComboBox Client)
-                // NOTE: Assurez-vous que la classe Client a les propriétés LastName et FirstName.
+                // 1. Chargement des Clients
                 var clients = await _unitOfWork.Clients.GetAllAsync();
                 AvailableClients.Clear();
                 foreach (var client in clients.OrderBy(c => c.LastName))
@@ -60,8 +61,7 @@ namespace CarRental.Desktop.WPF
                     AvailableClients.Add(client);
                 }
 
-                // 2. Chargement des Véhicules (pour le ComboBox Véhicule)
-                // NOTE: Assurez-vous que la classe Vehicle a les propriétés Make et Model.
+                // 2. Chargement des Véhicules
                 var vehicles = await _unitOfWork.Vehicles.GetAllAsync();
                 AvailableVehicles.Clear();
                 foreach (var vehicle in vehicles.OrderBy(v => v.Make).ThenBy(v => v.Model))
@@ -69,12 +69,9 @@ namespace CarRental.Desktop.WPF
                     AvailableVehicles.Add(vehicle);
                 }
 
-                // 3. Chargement des Réservations Actives (utilisation de RequestedEnd pour le filtre)
-                // NOTE: Assurez-vous que la classe Reservation a les propriétés RequestedEnd, RequestedStart, et VehicleId.
+                // 3. Chargement des Réservations Actives (celles dont la date de fin demandée n'est pas passée)
                 var reservations = await _unitOfWork.Reservations.GetAllAsync();
                 ActiveReservations.Clear();
-
-                // Utilisation de .ToList() avant le foreach pour éviter des problèmes de thread si la liste est modifiée.
                 foreach (var res in reservations.Where(r => r.RequestedEnd >= DateTime.Today).ToList())
                 {
                     ActiveReservations.Add(res);
@@ -87,28 +84,194 @@ namespace CarRental.Desktop.WPF
         }
 
         // =======================================================
-        // CRÉATION (CREATE) : Nouvelle Réservation
+        // FORMULAIRE ET CALCUL DU COÛT
         // =======================================================
+
+        /// <summary>
+        /// Valide les champs de saisie du formulaire (sans DepositAmount).
+        /// </summary>
+        private bool ValidateInput(out DateTime requestedStart, out DateTime requestedEnd, out decimal totalAmount)
+        {
+            requestedStart = dpStartDate.SelectedDate ?? DateTime.MinValue;
+            requestedEnd = dpEndDate.SelectedDate ?? DateTime.MinValue;
+            totalAmount = 0;
+
+            if (cmbClient.SelectedItem == null || cmbVehicle.SelectedItem == null)
+            {
+                MessageBox.Show("Veuillez sélectionner un Client et un Véhicule.", "Erreur de Saisie", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (requestedStart == DateTime.MinValue || requestedEnd == DateTime.MinValue)
+            {
+                MessageBox.Show("Veuillez sélectionner des dates de début et de fin.", "Erreur de Saisie", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (requestedStart < DateTime.Today.Date)
+            {
+                MessageBox.Show("La date de début ne peut pas être dans le passé.", "Erreur de Saisie", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (requestedEnd <= requestedStart)
+            {
+                MessageBox.Show("La date de fin demandée doit être postérieure à la date de début.", "Erreur de Saisie", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            // Validation du TotalAmount (txtTotalCost)
+            if (!decimal.TryParse(txtTotalCost.Text, NumberStyles.Any, CultureInfo.CurrentCulture, out totalAmount) || totalAmount <= 0)
+            {
+                MessageBox.Show("Veuillez entrer un Montant Total valide (montant décimal positif).", "Erreur de Format", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ClearForm()
+        {
+            _selectedReservation = null;
+            cmbClient.SelectedItem = null;
+            cmbVehicle.SelectedItem = null;
+            txtTotalCost.Text = string.Empty;
+            dpStartDate.SelectedDate = DateTime.Today;
+            dpEndDate.SelectedDate = DateTime.Today.AddDays(7);
+            BtnCreateReservation.IsEnabled = true;
+            dgvActiveReservations.SelectedItem = null; // Désélectionner dans la grille
+        }
+
+        private void BtnClear_Click(object sender, RoutedEventArgs e)
+        {
+            ClearForm();
+        }
+
+        private void CalculateCost()
+        {
+            if (cmbVehicle.SelectedItem is Vehicle selectedVehicle &&
+                dpStartDate.SelectedDate.HasValue &&
+                dpEndDate.SelectedDate.HasValue &&
+                dpEndDate.SelectedDate.Value > dpStartDate.SelectedDate.Value)
+            {
+                var days = (dpEndDate.SelectedDate.Value - dpStartDate.SelectedDate.Value).TotalDays;
+
+                // Utilisation de la propriété BaseRatePerDay définie dans le XAML
+                decimal dailyRate = selectedVehicle.BaseRatePerDay;
+
+                if (days > 0)
+                {
+                    decimal cost = dailyRate * (decimal)days;
+                    txtTotalCost.Text = cost.ToString("F2", CultureInfo.CurrentCulture);
+                }
+                else
+                {
+                    txtTotalCost.Text = "0.00";
+                }
+            }
+            else
+            {
+                // Réinitialiser si les dates ou le véhicule ne sont pas valides
+                txtTotalCost.Text = "0.00";
+            }
+        }
+
+        private void CmbVehicle_SelectionChanged(object sender, SelectionChangedEventArgs e) => CalculateCost();
+        private void DpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e) => CalculateCost();
+
+        // =======================================================
+        // DATA GRID (LECTURE & NETTOYAGE)
+        // =======================================================
+
+        /// <summary>
+        /// Gère la sélection dans la grille pour charger les données dans le formulaire.
+        /// </summary>
+        private void DgvActiveReservations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Conversion explicite vers l'objet Reservation
+            _selectedReservation = dgvActiveReservations.SelectedItem as Reservation;
+
+            if (_selectedReservation != null)
+            {
+                // Remplir le formulaire avec les données sélectionnées
+                cmbClient.SelectedValue = _selectedReservation.ClientId;
+                cmbVehicle.SelectedValue = _selectedReservation.VehicleId;
+                dpStartDate.SelectedDate = _selectedReservation.RequestedStart;
+                dpEndDate.SelectedDate = _selectedReservation.RequestedEnd;
+                txtTotalCost.Text = _selectedReservation.TotalAmount.ToString("F2", CultureInfo.CurrentCulture);
+
+                // On passe en mode modification
+                BtnCreateReservation.IsEnabled = false;
+            }
+            else
+            {
+                // Si la désélection se produit, on nettoie et on repasse en mode création
+                ClearForm();
+                BtnCreateReservation.IsEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Cache les colonnes non pertinentes et formate les montants/dates.
+        /// </summary>
+        private void DgvActiveReservations_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            // Liste des propriétés à masquer (IDs longs et collections de navigation)
+            if (e.PropertyName.EndsWith("Id") ||
+                e.PropertyName == "ActualStart" ||
+                e.PropertyName == "ActualEnd" ||
+                e.PropertyName == "CreatedByUserId" ||
+                e.PropertyName == "QRCodeData" ||
+                e.PropertyName == "InvoicePath" ||
+                e.PropertyName == "Client" ||
+                e.PropertyName == "Vehicle" ||
+                e.PropertyName == "CreatedByUser" ||
+                e.PropertyName == "Payments")
+            {
+                e.Column.Visibility = Visibility.Collapsed;
+            }
+
+            // Formatage des colonnes visibles
+            else if (e.PropertyName == "RequestedStart")
+            {
+                e.Column.Header = "Début Dem.";
+                (e.Column as DataGridTextColumn).Binding = new Binding(e.PropertyName) { StringFormat = "{0:dd/MM/yyyy}" };
+            }
+            else if (e.PropertyName == "RequestedEnd")
+            {
+                e.Column.Header = "Fin Dem.";
+                (e.Column as DataGridTextColumn).Binding = new Binding(e.PropertyName) { StringFormat = "{0:dd/MM/yyyy}" };
+            }
+            else if (e.PropertyName == "TotalAmount")
+            {
+                e.Column.Header = "Total (€)";
+                (e.Column as DataGridTextColumn).Binding = new Binding(e.PropertyName) { StringFormat = "{0:N2}" };
+            }
+            else if (e.PropertyName == "DepositAmount")
+            {
+                // Masque explicitement la colonne de dépôt
+                e.Column.Visibility = Visibility.Collapsed;
+            }
+            else if (e.PropertyName == "Status")
+            {
+                e.Column.Header = "Statut";
+            }
+        }
+
+        // =======================================================
+        // CRÉATION (CREATE)
+        // =======================================================
+
         private async void BtnCreateReservation_Click(object sender, RoutedEventArgs e)
         {
-            // NOTE: Assurez-vous que les contrôles XAML cmbClient, cmbVehicle, dpStartDate, dpEndDate, txtTotalCost et txtDepositAmount existent
-            // et que le bouton est nommé BtnCreateReservation.
-
-            if (!ValidateInput(out DateTime requestedStart, out DateTime requestedEnd, out decimal totalAmount, out decimal depositAmount)) return;
+            if (!ValidateInput(out DateTime requestedStart, out DateTime requestedEnd, out decimal totalAmount)) return;
 
             var selectedClient = cmbClient.SelectedItem as Client;
             var selectedVehicle = cmbVehicle.SelectedItem as Vehicle;
 
-            if (selectedClient == null || selectedVehicle == null)
-            {
-                MessageBox.Show("Veuillez sélectionner un Client et un Véhicule valides.", "Erreur de Saisie", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            // Vérification de disponibilité utilisant RequestedStart et RequestedEnd
+            // ... (Vérification de disponibilité existante) ...
             var isVehicleAvailable = ActiveReservations
                 .Where(r => r.VehicleId == selectedVehicle.VehicleId)
-                // Condition de chevauchement de deux intervalles de temps [A, B] et [C, D] : A < D ET C < B
                 .Any(r => requestedStart < r.RequestedEnd && requestedEnd > r.RequestedStart);
 
             if (isVehicleAvailable)
@@ -123,15 +286,15 @@ namespace CarRental.Desktop.WPF
                 {
                     ReservationId = Guid.NewGuid(),
                     ClientId = selectedClient.ClientId,
-                    VehicleId = selectedVehicle.VehicleId, // Guid est converti implicitement en Guid?
-                    // MAPPING CORRECT
+                    VehicleId = selectedVehicle.VehicleId,
                     RequestedStart = requestedStart,
                     RequestedEnd = requestedEnd,
                     TotalAmount = totalAmount,
-                    DepositAmount = depositAmount,
-                    Status = "Confirmed", // Statut initial
+                    DepositAmount = 0, // Défini à 0 car le champ est retiré
+                    Status = "Confirmed",
                 };
 
+                // Assurez-vous que IGenericRepository a bien AddAsync
                 await _unitOfWork.Reservations.AddAsync(newReservation);
                 await _unitOfWork.CompleteAsync();
 
@@ -146,127 +309,91 @@ namespace CarRental.Desktop.WPF
             }
         }
 
-        /// <summary>
-        /// Valide les champs de saisie du formulaire.
-        /// </summary>
-        private bool ValidateInput(out DateTime requestedStart, out DateTime requestedEnd, out decimal totalAmount, out decimal depositAmount)
+        // =======================================================
+        // MODIFICATION (UPDATE)
+        // =======================================================
+
+        private async void BtnUpdateReservation_Click(object sender, RoutedEventArgs e)
         {
-            // Les champs de DatePicker retournent des valeurs nullables, la conversion ?? DateTime.MinValue est sûre
-            requestedStart = dpStartDate.SelectedDate ?? DateTime.MinValue;
-            requestedEnd = dpEndDate.SelectedDate ?? DateTime.MinValue;
-            totalAmount = 0;
-            depositAmount = 0;
-
-            if (cmbClient.SelectedItem == null || cmbVehicle.SelectedItem == null)
+            if (_selectedReservation == null)
             {
-                MessageBox.Show("Veuillez sélectionner un Client et un Véhicule.", "Erreur de Saisie", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+                MessageBox.Show("Veuillez sélectionner une réservation à modifier dans la liste.", "Erreur de Sélection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
 
-            if (requestedStart == DateTime.MinValue || requestedEnd == DateTime.MinValue)
+            if (!ValidateInput(out DateTime requestedStart, out DateTime requestedEnd, out decimal totalAmount)) return;
+
+            var selectedClient = cmbClient.SelectedItem as Client;
+            var selectedVehicle = cmbVehicle.SelectedItem as Vehicle;
+
+            // Vérification de disponibilité (excluant la réservation en cours de modification)
+            var isVehicleAvailable = ActiveReservations
+                .Where(r => r.VehicleId == selectedVehicle.VehicleId && r.ReservationId != _selectedReservation.ReservationId)
+                .Any(r => requestedStart < r.RequestedEnd && requestedEnd > r.RequestedStart);
+
+            if (isVehicleAvailable)
             {
-                MessageBox.Show("Veuillez sélectionner des dates de début et de fin.", "Erreur de Saisie", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+                MessageBox.Show("Ce véhicule n'est pas disponible pour cette période demandée.", "Erreur de Disponibilité", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
 
-            if (requestedStart < DateTime.Today)
+            try
             {
-                MessageBox.Show("La date de début ne peut pas être dans le passé.", "Erreur de Saisie", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
+                // Mise à jour des propriétés
+                _selectedReservation.ClientId = selectedClient.ClientId;
+                _selectedReservation.VehicleId = selectedVehicle.VehicleId;
+                _selectedReservation.RequestedStart = requestedStart;
+                _selectedReservation.RequestedEnd = requestedEnd;
+                _selectedReservation.TotalAmount = totalAmount;
+                // DepositAmount n'est pas modifié ou est laissé à 0
 
-            if (requestedEnd <= requestedStart)
+                // Assurez-vous que IGenericRepository a bien Update
+                _unitOfWork.Reservations.Update(_selectedReservation);
+                await _unitOfWork.CompleteAsync();
+
+                MessageBox.Show("Réservation modifiée avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                await LoadDataAsync();
+                ClearForm();
+            }
+            catch (Exception ex)
             {
-                MessageBox.Show("La date de fin demandée doit être postérieure à la date de début.", "Erreur de Saisie", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+                MessageBox.Show($"Erreur lors de la modification de la réservation : {ex.Message}", "Erreur DB", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            // Validation du TotalAmount (txtTotalCost)
-            // Utilisation de CultureInfo.CurrentCulture (ou InvariantCulture si nécessaire, mais CurrentCulture est plus adapté à l'utilisateur)
-            if (!decimal.TryParse(txtTotalCost.Text, NumberStyles.Any, CultureInfo.CurrentCulture, out totalAmount) || totalAmount <= 0)
-            {
-                MessageBox.Show("Veuillez entrer un Montant Total valide (montant décimal positif).", "Erreur de Format", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-
-            // Validation du DepositAmount (txtDepositAmount)
-            if (!decimal.TryParse(txtDepositAmount.Text, NumberStyles.Any, CultureInfo.CurrentCulture, out depositAmount) || depositAmount < 0)
-            {
-                MessageBox.Show("Veuillez entrer un Montant de Dépôt valide (montant décimal positif ou nul).", "Erreur de Format", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-
-
-            return true;
-        }
-
-        private void ClearForm()
-        {
-            // Réinitialisation des contrôles
-            cmbClient.SelectedItem = null;
-            cmbVehicle.SelectedItem = null;
-            txtTotalCost.Text = string.Empty;
-            txtDepositAmount.Text = string.Empty;
-            dpStartDate.SelectedDate = DateTime.Today;
-            dpEndDate.SelectedDate = DateTime.Today.AddDays(7);
-        }
-
-        private void BtnClear_Click(object sender, RoutedEventArgs e)
-        {
-            ClearForm();
         }
 
         // =======================================================
-        // Calcul du coût automatique
+        // SUPPRESSION (DELETE)
         // =======================================================
-        private void CalculateCost()
-        {
-            // NOTE: Le véhicule doit avoir une propriété 'BaseRatePerDay' pour que ce calcul fonctionne.
-            // Si cette propriété n'existe pas, elle devra être dérivée du VehicleType ou Tariff associé.
 
-            if (cmbVehicle.SelectedItem is Vehicle selectedVehicle &&
-                dpStartDate.SelectedDate.HasValue &&
-                dpEndDate.SelectedDate.HasValue &&
-                dpEndDate.SelectedDate.Value > dpStartDate.SelectedDate.Value)
+        private async void BtnDeleteReservation_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedReservation == null)
             {
-                var days = (dpEndDate.SelectedDate.Value - dpStartDate.SelectedDate.Value).TotalDays;
-                if (days > 0)
+                MessageBox.Show("Veuillez sélectionner une réservation à supprimer dans la liste.", "Erreur de Sélection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var result = MessageBox.Show($"Êtes-vous sûr de vouloir supprimer la réservation n° {_selectedReservation.ReservationId.ToString().Substring(0, 8)}...?", "Confirmation de Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
                 {
-                    // La ligne suivante suppose que l'entité Vehicle a une propriété BaseRatePerDay de type decimal.
-                    // Si BaseRatePerDay n'existe pas, vous devez récupérer l'information du tarif.
-                    // Pour l'instant, on utilise une valeur par défaut ou simulée si la propriété n'existe pas.
-                    // Exemple de simulation (à remplacer par la logique réelle de tarif):
-                    decimal dailyRate = 50.0M; // Valeur par défaut / de test
+                    // Assurez-vous que IGenericRepository a bien Remove
+                    _unitOfWork.Reservations.Delete(_selectedReservation);
+                    await _unitOfWork.CompleteAsync();
 
-                    // Si le véhicule est chargé avec les propriétés de navigation, vous pouvez utiliser:
-                    // decimal dailyRate = selectedVehicle.Tariff.PricePerDay; 
+                    MessageBox.Show("Réservation supprimée avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // Pour le moment, nous allons utiliser le champ BaseRatePerDay que vous avez probablement dans l'entité Vehicle
-                    // Si vous rencontrez une erreur 'BaseRatePerDay' n'existe pas, nous devrons modifier le modèle.
-
-                    decimal cost;
-                    try
-                    {
-                        cost = selectedVehicle.BaseRatePerDay * (decimal)days;
-                    }
-                    catch (Exception)
-                    {
-                        // Fallback si BaseRatePerDay n'est pas une propriété valide ou n'est pas chargé
-                        cost = dailyRate * (decimal)days;
-                    }
-
-
-                    txtTotalCost.Text = cost.ToString("F2", CultureInfo.CurrentCulture);
-
-                    // Exemple de dépôt : 10% du coût total
-                    decimal deposit = Math.Round(cost * 0.1M, 2);
-                    txtDepositAmount.Text = deposit.ToString("F2", CultureInfo.CurrentCulture);
+                    await LoadDataAsync();
+                    ClearForm();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erreur lors de la suppression de la réservation : {ex.Message}", "Erreur DB", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
-
-        // Événements pour déclencher le calcul du coût
-        private void CmbVehicle_SelectionChanged(object sender, SelectionChangedEventArgs e) => CalculateCost();
-        private void DpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e) => CalculateCost();
     }
 }

@@ -2,28 +2,22 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace CarRental2.Core.Interfaces
+public interface IGenericRepository<T> where T : class
 {
-    public interface IGenericRepository<T> where T : class
-    {
-        // READ
-        Task<T> GetByIdAsync(Guid id);
-        Task<IReadOnlyList<T>> GetAllAsync();
+    Task<T> GetByIdAsync(Guid id);
 
-        // READ avec filtre (optionnel mais très utile)
-        Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> predicate);
+    // CORRECTION : L'interface doit déclarer les deux paramètres optionnels.
+    // Nous utilisons Func<IQueryable<T>, IQueryable<T>> car il est plus neutre pour la couche Core.
+    Task<IReadOnlyList<T>> GetAllAsync(
+        Expression<Func<T, bool>> filter = null,
+        Func<IQueryable<T>, IQueryable<T>> include = null);
 
-        // CREATE
-        Task AddAsync(T entity);
-
-        // UPDATE
-        void Update(T entity);
-
-        // DELETE
-        void Delete(T entity);
-        Task DeleteAsync(Guid id);
-    }
+    Task AddAsync(T entity);
+    void Update(T entity);
+    void Delete(T entity);
+    Task DeleteAsync(Guid id);
 }

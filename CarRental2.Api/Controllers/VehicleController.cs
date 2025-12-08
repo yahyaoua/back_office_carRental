@@ -1,4 +1,4 @@
-﻿// Dans CarRental.Api/Controllers/VehicleController.cs
+﻿// Dans CarRental.Api/Controllers/VehicleController.cs (VERSION MISE À JOUR)
 
 using CarRental2.Core.Entities;
 using CarRental2.Core.Interfaces.Services;
@@ -97,7 +97,7 @@ namespace CarRental.Api.Controllers
                 model.Date,
                 model.Type,
                 model.Notes,
-                currentUserId // Cet ID est ignoré si la propriété CreatedByUserId n'existe pas dans Maintenance.cs
+                currentUserId
             );
 
             if (!success)
@@ -133,6 +133,35 @@ namespace CarRental.Api.Controllers
             }
 
             return NoContent(); // Statut 204
+        }
+
+        // =========================================================
+        // 5. NOUVEAU GET: Obtenir l'image principale
+        // Route: GET /api/vehicle/{id}/primary-image
+        // =========================================================
+
+        /// <summary>
+        /// Obtient le chemin (URL) de l'image principale pour un véhicule donné.
+        /// </summary>
+        [HttpGet("{id}/primary-image")] // La route suit l'ID du véhicule
+        public async Task<IActionResult> GetPrimaryVehicleImage(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest("L'identifiant du véhicule est requis.");
+            }
+
+            // Appel à la nouvelle méthode du service
+            string imagePath = await _vehicleService.GetPrimaryVehicleImagePathAsync(id);
+
+            if (string.IsNullOrEmpty(imagePath))
+            {
+                // Si le chemin est null ou vide, le véhicule n'a peut-être pas d'image principale
+                return NotFound(new { Message = $"Aucune image principale trouvée pour le véhicule ID: {id}." });
+            }
+
+            // Retourne l'URL/chemin de l'image dans un objet JSON
+            return Ok(new { ImagePath = imagePath });
         }
     }
 }

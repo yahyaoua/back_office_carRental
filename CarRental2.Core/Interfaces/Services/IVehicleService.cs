@@ -33,5 +33,21 @@ namespace CarRental2.Core.Interfaces.Services
         /// Récupère un véhicule avec tous ses détails (images, maintenances).
         /// </summary>
         Task<Vehicle> GetVehicleDetailsAsync(Guid vehicleId);
+
+        Task<IReadOnlyList<Vehicle>> GetAllVehiclesAsync();
+
+        Task<IReadOnlyList<Maintenance>> GetAllMaintenancesAsync();
+
+        Task<Maintenance> GetCurrentPendingMaintenanceAsync(Guid vehicleId);
+
+        Task<bool> HasMaintenanceConflictAsync(Guid vehicleId, DateTime start, DateTime end);
+
+        // ***********************************************
+        // NOUVEAU : MISSION 4
+        // ***********************************************
+        /// <summary>
+        /// Récupère le chemin (ImagePath) de l'image principale d'un véhicule.
+        /// </summary>
+        Task<string> GetPrimaryVehicleImagePathAsync(Guid vehicleId); // <-- Ajout de la méthode
     }
 }

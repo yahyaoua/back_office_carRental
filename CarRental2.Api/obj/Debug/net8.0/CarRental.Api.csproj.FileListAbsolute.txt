@@ -133,6 +133,7 @@ C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Api\obj\Debug\net8.0\CarRent
 C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Api\obj\Debug\net8.0\CarRental.Api.csproj.CoreCompileInputs.cache
 C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Api\obj\Debug\net8.0\CarRental.Api.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Api\obj\Debug\net8.0\CarRental.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Api\obj\Debug\net8.0\CarRental.Api.sourcelink.json
 C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Api\obj\Debug\net8.0\rjimswa.dswa.cache.json
 C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Api\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Api\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json

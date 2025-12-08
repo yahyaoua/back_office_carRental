@@ -13,6 +13,7 @@ namespace CarRental2.Core.Interfaces
         IReservationRepository Reservations { get; }
         IClientRepository Clients { get; }
         IUserRepository Users { get; }
+        IMaintenanceRepository Maintenances { get; }
 
         // --- CORRECTION CLÉS (Utiliser les interfaces spécifiques que nous avons créées) ---
         ITariffRepository Tariffs { get; }
@@ -20,7 +21,7 @@ namespace CarRental2.Core.Interfaces
         // ---------------------------------------------------------------------------------
 
         // Repositories Génériques pour les entités plus simples
-        IGenericRepository<Maintenance> Maintenances { get; }
+        
         IGenericRepository<Payment> Payments { get; }
         IGenericRepository<VehicleImage> VehicleImages { get; }
 

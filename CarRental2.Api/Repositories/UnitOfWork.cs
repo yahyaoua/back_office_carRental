@@ -18,10 +18,11 @@ namespace CarRental.Api.Repositories
         private IUserRepository _users = null!;
 
         private ITariffRepository _tariffs = null!;
-        private IVehicleTypeRepository _vehicleTypes = null!; // <-- NOUVEAU
+        private IVehicleTypeRepository _vehicleTypes = null!;
+        private IMaintenanceRepository _maintenances = null!;// <-- NOUVEAU
 
         // Repositories génériques (les entités plus simples)
-        private IGenericRepository<Maintenance> _maintenances = null!;
+
         private IGenericRepository<Payment> _payments = null!;
         private IGenericRepository<VehicleImage> _vehicleImages = null!;
 
@@ -45,8 +46,8 @@ namespace CarRental.Api.Repositories
         public IVehicleTypeRepository VehicleTypes => _vehicleTypes ??= new VehicleTypeRepository(_dbContext); // <-- NOUVEAU
 
         // Repositories génériques
-        public IGenericRepository<Maintenance> Maintenances =>
-            _maintenances ??= new GenericRepository<Maintenance>(_dbContext);
+        public IMaintenanceRepository Maintenances =>
+            _maintenances ??= new MaintenanceRepository(_dbContext);
         public IGenericRepository<Payment> Payments =>
             _payments ??= new GenericRepository<Payment>(_dbContext);
         public IGenericRepository<VehicleImage> VehicleImages =>
