@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="CarRental.Desktop.WPF.DashboardPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="800">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" 
+                Background="#E3F2FD" 
+                BorderBrush="#007ACC" 
+                BorderThickness="1" 
+                Padding="15" 
+                Margin="0,0,15,0" 
+                CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Total Véhicules" 
+                           FontSize="12" 
+                           Foreground="#007ACC"/>
+                <TextBlock Text="{Binding TotalVehicles}" 
+                           FontWeight="Bold" 
+                           FontSize="28" 
+                           Foreground="#007ACC"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1" 
+                Background="#E8F5E9" 
+                BorderBrush="#4CAF50" 
+                BorderThickness="1" 
+                Padding="15" 
+                Margin="0,0,15,0" 
+                CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Véhicules Disponibles" 
+                           FontSize="12" 
+                           Foreground="#4CAF50"/>
+                <TextBlock Text="{Binding AvailableVehicles}" 
+                           FontWeight="Bold" 
+                           FontSize="28" 
+                           Foreground="#4CAF50"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Column="2" 
+                Background="#FFF3E0" 
+                BorderBrush="#FFC107" 
+                BorderThickness="1" 
+                Padding="15" 
+                CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="Réservations en Cours" 
+                           FontSize="12" 
+                           Foreground="#FFC107"/>
+                <TextBlock Text="{Binding ActiveReservations}" 
+                           FontWeight="Bold" 
+                           FontSize="28" 
+                           Foreground="#FFC107"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

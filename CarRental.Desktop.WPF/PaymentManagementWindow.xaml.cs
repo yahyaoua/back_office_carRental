@@ -291,6 +291,7 @@ namespace CarRental.Desktop.WPF
         private void DgvPayments_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // 1. Définir et vérifier la sélection immédiatement
+            // Utiliser 'as Payment' et vérifier le null
             _selectedPayment = dgvPayments.SelectedItem as Payment;
 
             if (_selectedPayment != null)
@@ -298,40 +299,27 @@ namespace CarRental.Desktop.WPF
                 // On est en mode MODIFICATION/SUPPRESSION
 
                 // Trouver la Réservation correspondante en utilisant la collection complète AllReservations
-                // (NOTE : J'ai renommé AvailableReservations en AllReservations dans le code précédent)
                 var correspondingReservation = AllReservations.FirstOrDefault(r => r.ReservationId == _selectedPayment.ReservationId);
 
                 if (correspondingReservation != null)
                 {
                     // 2. Sélectionner le Client (Ceci va déclencher CmbClient_SelectionChanged)
-                    // L'événement CmbClient_SelectionChanged va filtrer FilteredReservations
                     cmbClient.SelectedValue = correspondingReservation.ClientId;
 
-                    // 3. Sélectionner la Réservation (Ceci va déclencher CmbReservation_SelectionChanged)
-                    // L'événement CmbReservation_SelectionChanged va filtrer les paiements (à nouveau) et mettre à jour la synthèse
-                    cmbReservation.SelectedValue = _selectedPayment.ReservationId;
+                    
+                    cmbReservation.SelectedValue = _selectedPayment.ReservationId; 
 
-                    // 4. Remplir les champs de saisie du paiement
-                    // Maintenant que cmbReservation_SelectionChanged a mis à jour la synthèse, 
-                    // on peut écraser l'objet 'txtAmount' avec le montant du paiement sélectionné.
-                    txtAmount.Text = _selectedPayment.Amount.ToString("F2", CultureInfo.CurrentCulture);
-                    cmbPaymentMethod.SelectedItem = _selectedPayment.PaymentMethod;
-
-                    // 5. Mettre à jour l'état des boutons (Mode Modification/Suppression)
-                    BtnRecordPayment.IsEnabled = false;
-                    BtnUpdatePayment.IsEnabled = true;
-                    BtnDeletePayment.IsEnabled = true;
+                    
                 }
                 else
                 {
-                    // La réservation correspondante n'a pas été trouvée (problème de données)
+                    
                     ClearForm(true);
                 }
             }
             else
             {
-                // On est en mode CRÉATION / Désélection (le curseur a bougé ou ClearForm a été appelé)
-                // L'appel à ClearForm(false) doit être fait ici si on veut maintenir la sélection Client/Réservation
+                
                 ClearForm(false);
             }
         }

@@ -7710,23 +7710,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ouaabou\\.nuget\\packages\\": {},
+    "C:\\Users\\ilyass\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ouaabou\\source\\repos\\CarRental2\\CarRental.Desktop.WPF\\CarRental.Desktop.WPF.csproj",
+      "projectUniqueName": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental.Desktop.WPF\\CarRental.Desktop.WPF.csproj",
       "projectName": "CarRental.Desktop.WPF",
-      "projectPath": "C:\\Users\\ouaabou\\source\\repos\\CarRental2\\CarRental.Desktop.WPF\\CarRental.Desktop.WPF.csproj",
-      "packagesPath": "C:\\Users\\ouaabou\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ouaabou\\source\\repos\\CarRental2\\CarRental.Desktop.WPF\\obj\\",
+      "projectPath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental.Desktop.WPF\\CarRental.Desktop.WPF.csproj",
+      "packagesPath": "C:\\Users\\ilyass\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental.Desktop.WPF\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\ouaabou\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ilyass\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -7735,17 +7735,18 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "C:\\Users\\ouaabou\\source\\repos\\CarRental2\\CarRental2.Api\\CarRental.Api.csproj": {
-              "projectPath": "C:\\Users\\ouaabou\\source\\repos\\CarRental2\\CarRental2.Api\\CarRental.Api.csproj"
+            "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Api\\CarRental.Api.csproj": {
+              "projectPath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Api\\CarRental.Api.csproj"
             },
-            "C:\\Users\\ouaabou\\source\\repos\\CarRental2\\CarRental2.Core\\CarRental2.Core.csproj": {
-              "projectPath": "C:\\Users\\ouaabou\\source\\repos\\CarRental2\\CarRental2.Core\\CarRental2.Core.csproj"
+            "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Core\\CarRental2.Core.csproj": {
+              "projectPath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Core\\CarRental2.Core.csproj"
             }
           }
         }
@@ -7794,7 +7795,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

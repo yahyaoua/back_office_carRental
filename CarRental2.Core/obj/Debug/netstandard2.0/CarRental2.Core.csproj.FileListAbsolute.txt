@@ -9,3 +9,14 @@ C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.
 C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.sourcelink.json
 C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.dll
 C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.pdb
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.deps.json
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.dll
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.pdb
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.csproj.AssemblyReference.cache
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.AssemblyInfoInputs.cache
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.AssemblyInfo.cs
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.csproj.CoreCompileInputs.cache
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.sourcelink.json
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.dll
+C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.pdb

@@ -5,6 +5,12 @@
     <Compile Update="ClientManagementWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="DashboardPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="FinancialReportsWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MaintenanceManagementWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -12,9 +18,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="ReservationCreationWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="TariffManagementWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="VehicleManagementWindow.xaml.cs">
