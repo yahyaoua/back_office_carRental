@@ -5401,23 +5401,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ilyass\\.nuget\\packages\\": {},
+    "C:\\Users\\hp\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Api\\CarRental.Api.csproj",
+      "projectUniqueName": "C:\\Users\\hp\\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\\Bureau\\.NET\\back_office_carRental\\CarRental2.Api\\CarRental.Api.csproj",
       "projectName": "CarRental.Api",
-      "projectPath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Api\\CarRental.Api.csproj",
-      "packagesPath": "C:\\Users\\ilyass\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Api\\obj\\",
+      "projectPath": "C:\\Users\\hp\\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\\Bureau\\.NET\\back_office_carRental\\CarRental2.Api\\CarRental.Api.csproj",
+      "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\hp\\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\\Bureau\\.NET\\back_office_carRental\\CarRental2.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\ilyass\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\hp\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5426,15 +5426,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Core\\CarRental2.Core.csproj": {
-              "projectPath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Core\\CarRental2.Core.csproj"
+            "C:\\Users\\hp\\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\\Bureau\\.NET\\back_office_carRental\\CarRental2.Core\\CarRental2.Core.csproj": {
+              "projectPath": "C:\\Users\\hp\\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\\Bureau\\.NET\\back_office_carRental\\CarRental2.Core\\CarRental2.Core.csproj"
             }
           }
         }
@@ -5449,7 +5448,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -5495,7 +5494,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

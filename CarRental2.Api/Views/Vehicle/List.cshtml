@@ -1,0 +1,53 @@
+﻿@model List<CarRental.Api.ViewModels.VehicleViewModel>
+
+@{
+    ViewData["Title"] = "Available Vehicles";
+}
+
+<h2 class="vehicle-page-title">@ViewData["Title"]</h2>
+<hr class="vehicle-separator" />
+
+@if (Model != null && Model.Any())
+{
+    <div class="row vehicle-grid">
+        @foreach (var vehicle in Model)
+        {
+            <div class="col-md-4 mb-4 vehicle-col">
+                <div class="card shadow-sm vehicle-card">
+                    <img src="@vehicle.ImageUrl"
+                         class="card-img-top vehicle-image"
+                         alt="@vehicle.Make @vehicle.Model">
+
+                    <div class="card-body vehicle-card-body">
+
+                        <h5 class="card-title vehicle-title">
+                            @vehicle.Make @vehicle.Model (@vehicle.Year)
+                        </h5>
+
+                        <p class="card-text vehicle-info">
+                            Type: @vehicle.VehicleType<br />
+                        </p>
+
+                        <h4 class="text-success vehicle-price">
+                            @vehicle.DailyRate.ToString("C") / day
+                        </h4>
+
+                        <a asp-controller="ReservationPage"
+                           asp-action="Create"
+                           asp-route-id="@vehicle.VehicleId"
+                           class="btn btn-primary vehicle-btn">
+                            Book Now
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-warning vehicle-empty-message">
+        <p>Sorry, no vehicles are currently available for rent.</p>
+    </div>
+}

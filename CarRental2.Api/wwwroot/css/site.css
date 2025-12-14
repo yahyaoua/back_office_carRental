@@ -1,0 +1,469 @@
+﻿
+
+
+/* ------------------------------
+   GLOBAL PAGE STYLE
+------------------------------ */
+body {
+    background: #f3f6fa;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ------------------------------
+   NAVBAR / TITLE STYLE
+------------------------------ */
+.navbar {
+    background: #ffffff !important;
+    border-bottom: 2px solid #e4e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0d47a1 !important;
+    letter-spacing: 0.5px;
+    transition: 0.3s ease;
+}
+
+    .navbar-brand:hover {
+        color: #08306b !important;
+        transform: translateY(-1px);
+    }
+
+/* ------------------------------
+   PAGE TITLES
+------------------------------ */
+.page-title {
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #0d47a1;
+    text-align: center;
+}
+
+/* ------------------------------
+   FOOTER STYLE
+------------------------------ */
+footer {
+    background: #ffffff;
+    padding: 18px 0;
+    border-top: 2px solid #e4e7eb;
+    margin-top: 40px;
+}
+
+    footer .container {
+        font-size: 0.95rem;
+        text-align: center;
+        color: #555;
+    }
+
+    /* Hover effect for footer links if added later */
+    footer a {
+        color: #0d47a1;
+        text-decoration: none;
+    }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+/* ------------------------------
+   CARD DESIGN (for Home and others)
+------------------------------ */
+.home-card {
+    max-width: 900px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 40px 50px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+/* ------------------------------
+   BUTTON STYLE REUSE
+------------------------------ */
+.btn-primary-custom {
+    color: #fff;
+    background: #0d47a1 !important;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+    .btn-primary-custom:hover {
+        background: #08306b !important;
+        transform: translateY(-2px);
+    }
+
+
+/* -----------------------------------------
+   PAGE TITLE
+------------------------------------------ */
+.vehicle-page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #0d47a1;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.vehicle-separator {
+    border-top: 2px solid #d4d7dc;
+    margin-bottom: 25px;
+}
+
+/* -----------------------------------------
+   EMPTY MESSAGE
+------------------------------------------ */
+.vehicle-empty-message {
+    font-size: 1.05rem;
+    padding: 15px;
+}
+
+/* -----------------------------------------
+   BOOSTRAP GRID CUSTOMIZATION
+------------------------------------------ */
+.vehicle-grid {
+    margin-top: 20px;
+}
+
+.vehicle-col {
+    display: flex;
+}
+
+/* -----------------------------------------
+   VEHICLE CARD STYLE
+------------------------------------------ */
+.vehicle-card {
+    width: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    border: none;
+    background: #ffffff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+    .vehicle-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    }
+
+/* -----------------------------------------
+   IMAGE
+------------------------------------------ */
+.vehicle-image {
+    height: 180px;
+    width: 100%;
+    object-fit: cover;
+    background-color: #e6ebf2;
+}
+
+/* -----------------------------------------
+   CARD BODY
+------------------------------------------ */
+.vehicle-card-body {
+    padding: 18px;
+}
+
+/* -----------------------------------------
+   VEHICLE TEXTS
+------------------------------------------ */
+.vehicle-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #0d47a1;
+}
+
+.vehicle-info {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.vehicle-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #0d47a1;
+}
+
+/* ---*
+    /* =========================
+   Reservation Page Styling
+   ========================= */
+
+.reservation-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eef3f9, #f7f9fc);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 15px;
+}
+
+
+.reservation-container {
+    width: 100%;
+    max-width: 900px;
+}
+
+.reservation-card {
+    width: 100%;
+    border-radius: 18px;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Title */
+.reservation-title {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #1f2d3d;
+}
+
+.reservation-hr {
+    width: 80px;
+    border-top: 4px solid #0d6efd;
+    opacity: 1;
+}
+
+/* Card */
+
+
+.reservation-card-body {
+    padding: 32px;
+}
+
+/* Section titles */
+.reservation-section-title {
+    font-weight: 600;
+    color: #0d6efd;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-size: 0.95rem;
+}
+
+/* Inputs */
+.reservation-input,
+.reservation-readonly {
+    border-radius: 10px;
+    padding: 10px 14px;
+    border: 1px solid #dce1e7;
+    transition: all 0.2s ease;
+}
+
+    .reservation-input:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15);
+    }
+
+.reservation-readonly {
+    background-color: #f8fafc;
+    font-weight: 600;
+}
+
+/* Divider */
+.reservation-divider {
+    opacity: 0.15;
+}
+
+/* Buttons */
+.reservation-actions {
+    justify-content: flex-end;
+}
+
+.reservation-btn {
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .reservation-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(13, 110, 253, 0.3);
+    }
+
+.reservation-btn-outline {
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-weight: 600;
+}
+
+/* Validation */
+.text-danger {
+    font-size: 0.85rem;
+}
+
+/* Animation */
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .reservation-card-body {
+        padding: 20px;
+    }
+
+    .reservation-actions {
+        flex-direction: column;
+    }
+
+        .reservation-actions .btn {
+            width: 100%;
+        }
+}
+
+/* Alignement uniforme des champs */
+.reservation-form .mb-3,
+.reservation-form .col-md-6 {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Labels */
+.reservation-form label {
+    min-width: 180px;
+    font-weight: 500;
+    color: #1f2d3d;
+    margin-bottom: 0;
+}
+
+/* Inputs */
+.reservation-input,
+.reservation-readonly {
+    flex: 1;
+}
+
+
+/* =========================
+   VEHICLE LIST – DESKTOP
+   ========================= */
+
+/* Page title */
+.vehicle-page-title {
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: #0d3b66;
+    margin-bottom: 10px;
+}
+
+/* Separator */
+.vehicle-separator {
+    width: 120px;
+    border-top: 4px solid #0d6efd;
+    opacity: 1;
+    margin-bottom: 30px;
+}
+
+/* Grid spacing */
+.vehicle-grid {
+    margin-top: 10px;
+}
+
+/* Column */
+.vehicle-col {
+    display: flex;
+}
+
+/* Card */
+.vehicle-card {
+    width: 100%;
+    border-radius: 18px;
+    border: none;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+    .vehicle-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 22px 50px rgba(0, 0, 0, 0.15);
+    }
+
+/* Image */
+.vehicle-image {
+    height: 220px;
+    object-fit: cover;
+}
+
+/* Card body */
+.vehicle-card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+}
+
+/* Vehicle title */
+.vehicle-title {
+    font-weight: 700;
+    color: #0d3b66;
+    margin-bottom: 8px;
+}
+
+/* Info text */
+.vehicle-info {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+/* Price */
+.vehicle-price {
+    font-weight: 800;
+    font-size: 1.4rem;
+    margin: 14px 0 18px;
+    color: #198754;
+}
+
+/* Button */
+.vehicle-btn {
+    margin-top: auto;
+    border-radius: 25px;
+    padding: 10px 0;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* Empty state */
+.vehicle-empty-message {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+
+/* =========================
+   FORCE 3 VEHICLES PER ROW
+   (CSS GRID – DESKTOP)
+   ========================= */
+
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+/* Neutralise Bootstrap col behaviour */
+.vehicle-col {
+    width: 100%;
+    max-width: 100%;
+}
