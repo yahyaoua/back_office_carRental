@@ -467,3 +467,124 @@ footer {
     width: 100%;
     max-width: 100%;
 }
+
+
+
+
+/* ===============================
+   HOME PAGE – HERO CARD
+   =============================== */
+body {
+    min-height: 100vh;
+    background-image: url("/image/background/background3.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+.home-card {
+    max-width: 900px;
+    margin: 90px auto;
+    padding: 70px 45px;
+    background-image: url("/image/background/background1.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 22px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    text-align: center;
+}
+
+
+
+/* Titre */
+.page-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #0d47a1;
+    margin-bottom: 22px;
+}
+
+/* Texte */
+.home-text {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+/* Bouton */
+.btn-primary-custom {
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #0d47a1, #1565c0);
+    color: #fff !important;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 12px 25px rgba(13, 71, 161, 0.35);
+}
+
+    /* Hover bouton */
+    .btn-primary-custom:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 18px 35px rgba(13, 71, 161, 0.5);
+    }
+
+/* Animation */
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .home-card {
+        margin: 50px 15px;
+        padding: 45px 25px;
+    }
+
+    .page-title {
+        font-size: 32px;
+    }
+
+    .home-text {
+        font-size: 16px;
+    }
+}
+/* ===============================
+   FOOTER TOUJOURS EN BAS
+   =============================== */
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+    background: rgba(0, 0, 0, 0.6);
+    color: #ddd;
+    text-align: center;
+    padding: 15px;
+}

@@ -21,3 +21,34 @@
     endDate.addEventListener("change", validateDates);
 
 });
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const card = document.querySelector(".home-card");
+    const button = document.querySelector(".btn-primary-custom");
+
+    /* Déclenche l’animation */
+    if (card) {
+        setTimeout(() => {
+            card.style.opacity = "1";
+        }, 100);
+    }
+
+    /* Effet interactif bouton */
+    if (button) {
+        button.addEventListener("mouseenter", () => {
+            button.style.letterSpacing = "1px";
+        });
+
+        button.addEventListener("mouseleave", () => {
+            button.style.letterSpacing = "0";
+        });
+    }
+
+});
+
