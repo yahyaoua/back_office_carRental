@@ -9,19 +9,24 @@ using System.Threading.Tasks;
 namespace CarRental.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")] // Route de base : /api/vehicle
-    public class VehicleController : ControllerBase
+    [Route("api/vehicle")] // ✅ Route API explicite : /api/vehicle
+    public class VehicleApiController : Controller // ✅ Controller (au lieu de ControllerBase)
     {
         private readonly IVehicleService _vehicleService;
 
-        public VehicleController(IVehicleService vehicleService)
+        public VehicleApiController(IVehicleService vehicleService)
         {
             _vehicleService = vehicleService;
         }
 
         // =========================================================
+        // ✅ AJOUT MVC: Page Web pour afficher la liste
+        // URL: GET /Vehicle/List
+        // =========================================================
+        
+        // =========================================================
         // 1. GET: Rechercher les véhicules disponibles
-        // Route: GET /api/vehicle/search?typeId={guid}&start={date}&end={date}
+        // Route: GET /api/vehicle/search?vehicleTypeId={guid}&start={date}&end={date}
         // =========================================================
 
         /// <summary>
@@ -143,7 +148,7 @@ namespace CarRental.Api.Controllers
         /// <summary>
         /// Obtient le chemin (URL) de l'image principale pour un véhicule donné.
         /// </summary>
-        [HttpGet("{id}/primary-image")] // La route suit l'ID du véhicule
+        [HttpGet("{id}/primary-image")]
         public async Task<IActionResult> GetPrimaryVehicleImage(Guid id)
         {
             if (id == Guid.Empty)
@@ -151,16 +156,13 @@ namespace CarRental.Api.Controllers
                 return BadRequest("L'identifiant du véhicule est requis.");
             }
 
-            // Appel à la nouvelle méthode du service
             string imagePath = await _vehicleService.GetPrimaryVehicleImagePathAsync(id);
 
             if (string.IsNullOrEmpty(imagePath))
             {
-                // Si le chemin est null ou vide, le véhicule n'a peut-être pas d'image principale
                 return NotFound(new { Message = $"Aucune image principale trouvée pour le véhicule ID: {id}." });
             }
 
-            // Retourne l'URL/chemin de l'image dans un objet JSON
             return Ok(new { ImagePath = imagePath });
         }
     }

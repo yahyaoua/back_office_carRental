@@ -1,0 +1,22 @@
+﻿@model CarRental.Api.ViewModels.ReservationViewModel
+
+@{
+    ViewData["Title"] = "Book Your Vehicle";
+}
+
+<h4>Booking Details</h4>
+<div class="row">
+
+    <div class="col-md-6 form-group">
+        <label asp-for="RequestedStart" class="control-label"></label>
+        <input asp-for="RequestedStart" class="form-control" type="date" />
+        <span asp-validation-for="RequestedStart" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6 form-group">
+        <label asp-for="RequestedEnd" class="control-label"></label>
+        <input asp-for="RequestedEnd" class="form-control" type="date" />
+        <span asp-validation-for="RequestedEnd" class="text-danger"></span>
+    </div>
+
+</div>

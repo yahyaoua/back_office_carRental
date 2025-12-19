@@ -148,7 +148,7 @@ namespace CarRental.Desktop.WPF {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/CarRental.Desktop.WPF;component/clientmanagementwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/CarRental.Desktop.WPF;V1.0.0.0;component/clientmanagementwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\ClientManagementWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

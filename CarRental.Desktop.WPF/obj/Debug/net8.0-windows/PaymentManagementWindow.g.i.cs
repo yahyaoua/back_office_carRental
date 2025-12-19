@@ -133,7 +133,7 @@ namespace CarRental.Desktop.WPF {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/CarRental.Desktop.WPF;component/paymentmanagementwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/CarRental.Desktop.WPF;V1.0.0.0;component/paymentmanagementwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\PaymentManagementWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

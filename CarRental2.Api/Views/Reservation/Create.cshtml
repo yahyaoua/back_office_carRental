@@ -1,0 +1,112 @@
+﻿@model CarRental.Api.ViewModels.ReservationViewModel
+
+@{
+    ViewData["Title"] = "Create Reservation";
+}
+
+<div class="reservation-page">
+    <div class="container mt-4 reservation-container">
+        <h2 class="mb-3 reservation-title">@ViewData["Title"]</h2>
+        <hr class="reservation-hr" />
+
+        @* Message de succès / erreur (optionnel) *@
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+
+        <form asp-controller="Reservation"
+              asp-action="Create"
+              asp-route-id="@Model.VehicleId"
+              method="post"
+              class="mt-3 reservation-form">
+
+            @Html.AntiForgeryToken()
+
+            @* Important : envoyer VehicleId aussi dans le POST *@
+            <input asp-for="VehicleId" type="hidden" />
+
+            <div class="card shadow-sm reservation-card">
+                <div class="card-body reservation-card-body">
+
+                    <h5 class="card-title mb-3 reservation-section-title">Reservation details</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label">Vehicle</label>
+                        <input class="form-control reservation-readonly" value="@Model.VehicleName" readonly />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="RequestedStart" class="form-label"></label>
+                            <input asp-for="RequestedStart" class="form-control reservation-input" type="date" />
+                            <span asp-validation-for="RequestedStart" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="RequestedEnd" class="form-label"></label>
+                            <input asp-for="RequestedEnd" class="form-control reservation-input" type="date" />
+                            <span asp-validation-for="RequestedEnd" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 reservation-divider" />
+
+                    <h5 class="card-title mb-3 reservation-section-title">Client information</h5>
+
+                    <div class="mb-3">
+                        <label asp-for="ClientName" class="form-label"></label>
+                        <input asp-for="ClientName" class="form-control reservation-input" />
+                        <span asp-validation-for="ClientName" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ClientEmail" class="form-label"></label>
+                            <input asp-for="ClientEmail" class="form-control reservation-input" />
+                            <span asp-validation-for="ClientEmail" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ClientPhone" class="form-label"></label>
+                            <input asp-for="ClientPhone" class="form-control reservation-input" />
+                            <span asp-validation-for="ClientPhone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    @* ✅ Champs nécessaires pour créer Client (selon Client.cs) *@
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="DriverLicenseNumber" class="form-label"></label>
+                            <input asp-for="DriverLicenseNumber" class="form-control reservation-input" />
+                            <span asp-validation-for="DriverLicenseNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="BirthDate" class="form-label"></label>
+                            <input asp-for="BirthDate" class="form-control reservation-input" type="date" />
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label"></label>
+                        <input asp-for="Address" class="form-control reservation-input" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4 reservation-actions">
+                        <button type="submit" class="btn btn-primary reservation-btn">
+                            Confirm Reservation
+                        </button>
+
+                        <a asp-controller="Vehicle" asp-action="List" class="btn btn-outline-secondary reservation-btn-outline">
+                            Back to vehicles
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
