@@ -9,6 +9,6 @@ namespace CarRental2.Core.Interfaces.Services
 {
     public interface IFinancialReportService
     {
-        Task<FinancialSummaryDto> GetMonthlySummaryAsync(DateTime startDate, DateTime endDate);
+        Task<FinancialReportDto> GetFinancialReportAsync(DateTime startDate, DateTime endDate);
     }
 }

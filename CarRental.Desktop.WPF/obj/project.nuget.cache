@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8CGU0uduox0=",
+  "dgSpecHash": "RtyRAwxufhY=",
   "success": true,
   "projectFilePath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental.Desktop.WPF\\CarRental.Desktop.WPF.csproj",
   "expectedPackageFiles": [
@@ -82,7 +82,9 @@
     "C:\\Users\\ilyass\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\ilyass\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\ilyass\\.nuget\\packages\\newtonsoft.json\\9.0.1\\newtonsoft.json.9.0.1.nupkg.sha512",
+    "C:\\Users\\ilyass\\.nuget\\packages\\questpdf\\2025.12.0\\questpdf.2025.12.0.nupkg.sha512",
     "C:\\Users\\ilyass\\.nuget\\packages\\runtime.native.system\\4.0.0\\runtime.native.system.4.0.0.nupkg.sha512",
+    "C:\\Users\\ilyass\\.nuget\\packages\\skiasharp.nativeassets.win32\\3.119.1\\skiasharp.nativeassets.win32.3.119.1.nupkg.sha512",
     "C:\\Users\\ilyass\\.nuget\\packages\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
     "C:\\Users\\ilyass\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
     "C:\\Users\\ilyass\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.6.2\\swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",

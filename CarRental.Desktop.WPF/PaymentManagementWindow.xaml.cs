@@ -337,8 +337,7 @@ namespace CarRental.Desktop.WPF
             cmbPaymentMethod.SelectedIndex = 0;
 
             BtnRecordPayment.IsEnabled = true;
-            BtnUpdatePayment.IsEnabled = false;
-            BtnDeletePayment.IsEnabled = false;
+            
         }
 
         // =======================================================
@@ -382,77 +381,9 @@ namespace CarRental.Desktop.WPF
             }
         }
 
-        private async void BtnUpdatePayment_Click(object sender, RoutedEventArgs e)
-        {
-            if (_selectedPayment == null)
-            {
-                MessageBox.Show("Veuillez sélectionner un paiement à modifier dans la liste.", "Erreur de Sélection", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+        
 
-            if (!ValidateUpdateInput(out decimal amount, out string method)) return;
-
-            await _lock.WaitAsync();
-            try
-            {
-                _selectedPayment.Amount = amount;
-                _selectedPayment.PaymentMethod = method;
-
-                _unitOfWork.Payments.Update(_selectedPayment);
-                await _unitOfWork.CompleteAsync();
-
-                MessageBox.Show("Paiement modifié avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                await LoadDataAsync();
-                UpdateSummary((Reservation)cmbReservation.SelectedItem);
-                ClearForm(false);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erreur lors de la modification du paiement : {ex.Message}", "Erreur DB", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                _lock.Release();
-            }
-        }
-
-        private async void BtnDeletePayment_Click(object sender, RoutedEventArgs e)
-        {
-            if (_selectedPayment == null)
-            {
-                MessageBox.Show("Veuillez sélectionner un paiement à supprimer.", "Erreur de Sélection", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            string partialReservationId = _selectedPayment.ReservationId.ToString().Substring(0, Math.Min(8, _selectedPayment.ReservationId.ToString().Length)) + "...";
-            var result = MessageBox.Show($"Êtes-vous sûr de vouloir supprimer définitivement le paiement de {_selectedPayment.Amount:C} lié à la réservation {partialReservationId}?", "Confirmation de Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                await _lock.WaitAsync();
-                try
-                {
-                    _unitOfWork.Payments.Delete(_selectedPayment);
-                    await _unitOfWork.CompleteAsync();
-
-                    MessageBox.Show("Paiement supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    await LoadDataAsync();
-
-                    UpdateSummary((Reservation)cmbReservation.SelectedItem);
-                    ClearForm(true);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Erreur lors de la suppression du paiement : {ex.Message}", "Erreur DB", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                finally
-                {
-                    _lock.Release();
-                }
-            }
-        }
+        
 
         // =======================================================
         // VALIDATION

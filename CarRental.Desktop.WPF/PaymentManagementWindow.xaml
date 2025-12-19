@@ -156,19 +156,7 @@
         </Border>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
-            <Button x:Name="BtnUpdatePayment" 
-                    Content=" Modifier le Paiement Sélectionné" 
-                    Click="BtnUpdatePayment_Click"
-                    IsEnabled="False"
-                    Background="#FFC107" Foreground="Black" 
-                    Padding="15,8" Margin="10,0" FontWeight="Bold"/>
-
-            <Button x:Name="BtnDeletePayment" 
-                    Content=" Supprimer le Paiement Sélectionné" 
-                    Click="BtnDeletePayment_Click"
-                    IsEnabled="False"
-                    Background="#F44336" Foreground="White" 
-                    Padding="15,8" Margin="10,0" FontWeight="Bold"/>
+            
         </StackPanel>
 
         <TextBlock Grid.Row="3" 

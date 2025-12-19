@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:CarRental.Desktop.WPF.ViewModels"
         mc:Ignorable="d"
-        Title="Rapports Financiers" Height="600" Width="800"
+        Title="Analyse Financière - Back Office" Height="750" Width="1000"
         FontFamily="Segoe UI"
+        Background="#F5F6F7"
         d:DataContext="{d:DesignInstance vm:FinancialReportViewModel}">
 
     <Window.Resources>
@@ -14,30 +15,27 @@
             <Setter Property="Background" Value="#007ACC"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="20,8"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="5">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#005C99"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="RightAlignedColumn" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
     </Window.Resources>
 
-    <Grid Margin="20">
+    <Grid Margin="25">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -45,74 +43,118 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,0,0,20">
-            <TextBlock Text="Rapport de Revenu Mensuel"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Foreground="#007ACC"
-                       Margin="0,0,0,10"/>
-
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Du :" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <DatePicker SelectedDate="{Binding StartDate}" Width="120" />
-
-                <TextBlock Text="Au :" VerticalAlignment="Center" Margin="15,0,5,0"/>
-                <DatePicker SelectedDate="{Binding EndDate}" Width="120" />
-
-                <Button Content="Actualiser"
-                         Margin="15,0,0,0"
-                         Padding="10,5"
-                         Background="#4CAF50"
-                         Foreground="White"
-                         Command="{Binding LoadSummaryCommand}"/>
+        <DockPanel Grid.Row="0" Margin="0,0,0,25">
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock Text="Rapports Financiers" FontSize="28" FontWeight="Light" Foreground="#2C3E50"/>
+                <TextBlock Text="Détails des réservations et flux de trésorerie" Foreground="#7F8C8D"/>
             </StackPanel>
-        </StackPanel>
 
-        <Grid Grid.Row="1" Margin="0,0,0,20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <StackPanel Margin="0,0,15,0">
+                    <TextBlock Text="Début" FontSize="11" Foreground="#7F8C8D" Margin="0,0,0,3"/>
+                    <DatePicker SelectedDate="{Binding StartDate}" Width="130"/>
+                </StackPanel>
+                <StackPanel Margin="0,0,15,0">
+                    <TextBlock Text="Fin" FontSize="11" Foreground="#7F8C8D" Margin="0,0,0,3"/>
+                    <DatePicker SelectedDate="{Binding EndDate}" Width="130"/>
+                </StackPanel>
+                <Button Content="Actualiser les données" 
+                        Command="{Binding LoadSummaryCommand}"
+                        Background="#27AE60" Foreground="White" 
+                        Padding="15,5" Margin="0,0,0,0" Height="32" VerticalAlignment="Bottom"
+                        Style="{StaticResource ActionButtonStyle}"/>
+            </StackPanel>
+        </DockPanel>
 
-            <Border Grid.Column="0" Background="#E3F2FD" BorderBrush="#007ACC" BorderThickness="1" Padding="15" Margin="0,0,15,0" CornerRadius="8">
+        <UniformGrid Grid.Row="1" Columns="3" Margin="0,0,0,20">
+            <Border Background="White" Margin="0,0,10,0" Padding="20" CornerRadius="6" BorderThickness="0,0,0,3" BorderBrush="#3498DB">
                 <StackPanel>
-                    <TextBlock Text="Nombre de Réservations" FontSize="12" Foreground="#007ACC"/>
-                    <TextBlock Text="{Binding Summary.TotalReservationsCount}"
-                               FontWeight="Bold" FontSize="28" Foreground="#007ACC"/>
+                    <TextBlock Text="RÉSERVATIONS" FontSize="11" FontWeight="Bold" Foreground="#95A5A6"/>
+                    <TextBlock Text="{Binding Report.TotalReservationsCount}" FontSize="24" FontWeight="Bold" Foreground="#2C3E50"/>
                 </StackPanel>
             </Border>
-
-            <Border Grid.Column="1" Background="#FFF3E0" BorderBrush="#FFC107" BorderThickness="1" Padding="15" Margin="0,0,15,0" CornerRadius="8">
+            <Border Background="White" Margin="5,0,5,0" Padding="20" CornerRadius="6" BorderThickness="0,0,0,3" BorderBrush="#F1C40F">
                 <StackPanel>
-                    <TextBlock Text="Total Montant Dû (Réservations)" FontSize="12" Foreground="#FFC107"/>
-                    <TextBlock Text="{Binding Summary.TotalReservationRevenue, StringFormat=C0}"
-                               FontWeight="Bold" FontSize="28" Foreground="#FFC107"/>
+                    <TextBlock Text="MONTANT GLOBAL DÛ" FontSize="11" FontWeight="Bold" Foreground="#95A5A6"/>
+                    <TextBlock Text="{Binding Report.TotalAmountDue, StringFormat='{}{0:N2} €'}" FontSize="24" FontWeight="Bold" Foreground="#2C3E50"/>
                 </StackPanel>
             </Border>
-
-            <Border Grid.Column="2" Background="#E8F5E9" BorderBrush="#4CAF50" BorderThickness="1" Padding="15" CornerRadius="8">
+            <Border Background="White" Margin="10,0,0,0" Padding="20" CornerRadius="6" BorderThickness="0,0,0,3" BorderBrush="#27AE60">
                 <StackPanel>
-                    <TextBlock Text="REVENU TOTAL (Paiements Reçus)" FontSize="12" Foreground="#4CAF50"/>
-                    <TextBlock Text="{Binding Summary.TotalPaymentsReceived, StringFormat=C0}"
-                               FontWeight="Bold" FontSize="28" Foreground="#4CAF50"/>
+                    <TextBlock Text="REVENU ENCAISSÉ" FontSize="11" FontWeight="Bold" Foreground="#95A5A6"/>
+                    <TextBlock Text="{Binding Report.TotalPaymentsCollected, StringFormat='{}{0:N2} €'}" FontSize="24" FontWeight="Bold" Foreground="#27AE60"/>
                 </StackPanel>
             </Border>
-        </Grid>
+        </UniformGrid>
 
-        <TextBlock Grid.Row="2"
-                   Text="Détails du Rapport (À implémenter : Liste des paiements/réservations)"
-                   Foreground="#999"
-                   VerticalAlignment="Top"
-                   Margin="0,10,0,0"/>
+        <DataGrid Grid.Row="2" 
+                  ItemsSource="{Binding Report.Details}" 
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True" 
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#EDF0F2"
+                  Background="White"
+                  BorderThickness="1"
+                  BorderBrush="#D6DBDF"
+                  RowHeight="38">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#F8F9FA"/>
+                    <Setter Property="Padding" Value="12,10"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Foreground" Value="#34495E"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    <Setter Property="BorderBrush" Value="#D6DBDF"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding ReservationDate, StringFormat=\{0:dd/MM/yyyy\}}" Width="110"/>
+                <DataGridTextColumn Header="Client" Binding="{Binding ClientFullName}" Width="1.5*"/>
+                <DataGridTextColumn Header="Véhicule" Binding="{Binding VehicleModel}" Width="1.5*"/>
+                <DataGridTextColumn Header="Statut" Binding="{Binding Status}" Width="100"/>
 
-        <Button Grid.Row="3"
-                Content="Exporter en PDF (Prochaine Étape)"
-                Height="40"
-                Margin="0,20,0,0"
-                Style="{StaticResource ActionButtonStyle}"
-                HorizontalAlignment="Right"
-                Command="{Binding GeneratePdfCommand}"/>
+                <DataGridTextColumn Header="Total Dû" 
+                                    Binding="{Binding TotalReservationPrice, StringFormat='{}{0:N2} €'}" 
+                                    ElementStyle="{StaticResource RightAlignedColumn}" Width="120"/>
 
+                <DataGridTextColumn Header="Payé" 
+                                    Binding="{Binding AmountPaid, StringFormat='{}{0:N2} €'}" 
+                                    ElementStyle="{StaticResource RightAlignedColumn}" Width="120"/>
+
+                <DataGridTextColumn Header="Solde" 
+                                    Binding="{Binding Balance, StringFormat='{}{0:N2} €'}" 
+                                    Width="120">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource RightAlignedColumn}">
+                            <Setter Property="Foreground" Value="#E74C3C"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Border Grid.Row="3" Background="#2C3E50" Margin="0,15,0,0" Padding="20" CornerRadius="6">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <StackPanel Margin="0,0,40,0">
+                        <TextBlock Text="SOLDE À PERCEVOIR TOTAL" FontSize="10" Foreground="#BDC3C7" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Report.TotalRemainingBalance, StringFormat='{}{0:N2} €'}" FontSize="22" Foreground="#E74C3C" FontWeight="Bold"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="REVENU RÉEL (NET)" FontSize="10" Foreground="#BDC3C7" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Report.TotalPaymentsCollected, StringFormat='{}{0:N2} €'}" FontSize="22" Foreground="#2ECC71" FontWeight="Bold"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <Button DockPanel.Dock="Right" 
+                        Content="Générer Rapport PDF " 
+                        HorizontalAlignment="Right"
+                        Command="{Binding GeneratePdfCommand}"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Background="#3498DB"/>
+            </DockPanel>
+        </Border>
     </Grid>
 </Window>
