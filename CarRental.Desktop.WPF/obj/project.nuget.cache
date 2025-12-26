@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "RtyRAwxufhY=",
+  "dgSpecHash": "Swq5YzT6chE=",
   "success": true,
   "projectFilePath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental.Desktop.WPF\\CarRental.Desktop.WPF.csproj",
   "expectedPackageFiles": [
@@ -146,15 +146,5 @@
     "C:\\Users\\ilyass\\.nuget\\packages\\system.xml.readerwriter\\4.0.11\\system.xml.readerwriter.4.0.11.nupkg.sha512",
     "C:\\Users\\ilyass\\.nuget\\packages\\system.xml.xdocument\\4.0.11\\system.xml.xdocument.4.0.11.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "message": "Problème de lecture du fichier cache C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental.Desktop.WPF\\obj\\project.nuget.cache\u00A0: '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
-      "projectPath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental.Desktop.WPF\\CarRental.Desktop.WPF.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental.Desktop.WPF\\CarRental.Desktop.WPF.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }

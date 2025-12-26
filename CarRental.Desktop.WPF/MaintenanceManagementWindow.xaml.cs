@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Drawing; 
+using WinForms = System.Windows.Forms;
+
 
 namespace CarRental.Desktop.WPF
 {
@@ -63,15 +66,17 @@ namespace CarRental.Desktop.WPF
 
         private async void MaintenanceManagementWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // Vérification de nullité ajoutée pour éviter les plantages si l'injection a échoué
             if (_maintenanceService == null)
             {
-                MessageBox.Show("Erreur de dépendance : Le service de maintenance n'a pas été initialisé.", "Erreur d'Initialisation", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Erreur critique : Service non initialisé.");
                 this.Close();
                 return;
             }
 
             await LoadDataAsync();
+
+            // Verifie les maintenances dans les 3 prochains jours
+            await CheckAndNotifyUpcomingMaintenance(3);
         }
 
         // ==========================================================
@@ -278,5 +283,53 @@ namespace CarRental.Desktop.WPF
 
             return true;
         }
+
+        private async Task CheckAndNotifyUpcomingMaintenance(int daysThreshold)
+        {
+            try
+            {
+                
+                var upcoming = await _maintenanceService.GetUpcomingMaintenancesAsync(daysThreshold);
+
+                if (upcoming != null && upcoming.Any())
+                {
+                    int count = upcoming.Count();
+                    string title = "⚠️ Rappel Maintenance";
+                    string message;
+
+                    if (count == 1)
+                    {
+                        var m = upcoming.First();
+                        string plaque = m.Vehicle != null ? m.Vehicle.PlateNumber : "Inconnu";
+                        message = $"Entretien '{m.Type}' prévu le {m.ScheduledDate:dd/MM} pour le véhicule {plaque}.";
+                    }
+                    else
+                    {
+                        message = $"{count} véhicules nécessitent une maintenance dans les {daysThreshold} jours !";
+                    }
+
+                    // Declenche la notif Windows
+                    ShowWindowsNotification(title, message);
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                System.Diagnostics.Debug.WriteLine($"Erreur notif : {ex.Message}");
+            }
+        }
+
+        private void ShowWindowsNotification(string title, string message)
+        {
+           
+            using (var notifyIcon = new WinForms.NotifyIcon())
+            {
+               
+                notifyIcon.Icon = SystemIcons.Information;
+                notifyIcon.Visible = true;
+                notifyIcon.ShowBalloonTip(5000, title, message, WinForms.ToolTipIcon.Warning);
+            }
+        }
+
     }
 }

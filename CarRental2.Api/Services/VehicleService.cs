@@ -2,11 +2,12 @@
 
 using CarRental2.Core.Entities;
 using CarRental2.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using CarRental2.Core.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq; 
 using System.Threading.Tasks;
-using System.Linq; // Assurez-vous d'avoir System.Linq pour la méthode Any()
 
 namespace CarRental.Api.Services
 {
@@ -170,6 +171,21 @@ namespace CarRental.Api.Services
 
             // Retourne vrai si au moins un conflit est trouvé
             return conflictingMaintenance.Any();
+        }
+
+        // pour notificatins
+        public async Task<IEnumerable<Maintenance>> GetUpcomingMaintenancesAsync(int daysThreshold)
+        {
+            var targetDate = DateTime.Today.AddDays(daysThreshold);
+
+            var allMaintenances = await _unitOfWork.Maintenances.GetAllAsync();
+
+            return allMaintenances
+                .Where(m =>
+                    m.ScheduledDate >= DateTime.Today &&
+                    m.ScheduledDate <= targetDate &&
+                    m.Status != "Completed")
+                .ToList();
         }
     }
 }

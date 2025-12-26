@@ -1,14 +1,3 @@
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.deps.json
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.dll
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.pdb
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.csproj.AssemblyReference.cache
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.AssemblyInfoInputs.cache
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.AssemblyInfo.cs
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.csproj.CoreCompileInputs.cache
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.sourcelink.json
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.dll
-C:\Users\ouaabou\source\repos\CarRental2\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.pdb
 C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.deps.json
 C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.dll
 C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.pdb
@@ -20,14 +9,3 @@ C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarR
 C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.sourcelink.json
 C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.dll
 C:\Users\ilyass\Desktop\Car_rental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.pdb
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.deps.json
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.dll
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\bin\Debug\netstandard2.0\CarRental2.Core.pdb
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.csproj.AssemblyReference.cache
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.AssemblyInfoInputs.cache
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.AssemblyInfo.cs
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.csproj.CoreCompileInputs.cache
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.sourcelink.json
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.dll
-C:\Users\hp\OneDrive - Ecole Marocaine des Sciences de l'Ingénieur\Bureau\.NET\back_office_carRental\CarRental2.Core\obj\Debug\netstandard2.0\CarRental2.Core.pdb

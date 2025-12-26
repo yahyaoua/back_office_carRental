@@ -114,15 +114,5 @@
     "C:\\Users\\ilyass\\.nuget\\packages\\system.threading.tasks.extensions\\4.6.0\\system.threading.tasks.extensions.4.6.0.nupkg.sha512",
     "C:\\Users\\ilyass\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "message": "Problème de lecture du fichier cache C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Api\\obj\\project.nuget.cache\u00A0: '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
-      "projectPath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Api\\CarRental.Api.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\ilyass\\Desktop\\Car_rental\\CarRental2.Api\\CarRental.Api.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }
