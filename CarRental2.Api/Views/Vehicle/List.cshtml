@@ -31,13 +31,13 @@
                         <h4 class="text-success vehicle-price">
                             @vehicle.DailyRate.ToString("C") / day
                         </h4>
-
-                        <a asp-controller="ReservationPage"
-                           asp-action="Create"
-                           asp-route-id="@vehicle.VehicleId"
-                           class="btn btn-primary vehicle-btn">
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           asp-route-vehicleId="@vehicle.VehicleId">
                             Book Now
                         </a>
+
+
 
                     </div>
                 </div>

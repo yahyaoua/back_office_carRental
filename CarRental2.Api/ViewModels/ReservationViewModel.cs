@@ -18,37 +18,46 @@ namespace CarRental.Api.ViewModels
         [Display(Name = "Requested Return Date")]
         public DateTime RequestedEnd { get; set; }
 
-        [Required(ErrorMessage = "Name is required.")]
-        [Display(Name = "Full Name")]
-        public string ClientName { get; set; }
+        // ================= CLIENT =================
+
+        [Required(ErrorMessage = "First name is required.")]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Last name is required.")]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; } = string.Empty;
+
+        // (optionnel – si encore utilisé ailleurs)
+        public string ClientName => $"{FirstName} {LastName}".Trim();
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress]
         [Display(Name = "Email Address")]
-        public string ClientEmail { get; set; }
+        public string ClientEmail { get; set; } = string.Empty;
 
         [Phone]
         [Display(Name = "Phone Number")]
-        public string ClientPhone { get; set; }
+        public string? ClientPhone { get; set; }
 
-        // ✅ AJOUTS nécessaires pour créer Client (selon Client.cs)
         [Required(ErrorMessage = "Driver license number is required.")]
         [Display(Name = "Driver License Number")]
-        public string DriverLicenseNumber { get; set; }
+        public string DriverLicenseNumber { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Birth date is required.")]
         [DataType(DataType.Date)]
         [Display(Name = "Birth Date")]
         public DateTime BirthDate { get; set; }
 
         [Display(Name = "Address")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
-        // optionnel: si tu veux séparer plutôt que parser
-        // public string FirstName { get; set; }
-        // public string LastName { get; set; }
+        // ================= AFFICHAGE =================
 
         public decimal DailyRate { get; set; }
         public decimal EstimatedTotal { get; set; }
-        public string VehicleName { get; set; }
+
+        // ⚠️ affichage seulement (PAS Required)
+        public string? VehicleName { get; set; }
     }
 }

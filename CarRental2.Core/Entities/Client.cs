@@ -2,16 +2,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;// Utilisé pour les annotations (facultatif mais recommandé pour EF Core)
+using System.ComponentModel.DataAnnotations;
 
 namespace CarRental2.Core.Entities
 {
     public class Client
     {
-        // 🔑 PK: ClientId (GUID)
+        // 🔑 PK
         public Guid ClientId { get; set; }
 
-        // FirstName, LastName
+        // =========================
+        // Identity
+        // =========================
+
         [Required]
         [StringLength(100)]
         public string FirstName { get; set; }
@@ -20,32 +23,45 @@ namespace CarRental2.Core.Entities
         [StringLength(100)]
         public string LastName { get; set; }
 
-        // Email, Phone
         [Required]
         [EmailAddress]
         [StringLength(255)]
         public string Email { get; set; }
 
+        // 🔐 PASSWORD (HASHÉ)
+        
+        public string PasswordHash { get; set; }
+
+        // =========================
+        // Contact
+        // =========================
+
         [StringLength(50)]
         public string Phone { get; set; }
 
-        // Address
-        public string Address { get; set; } // Laisser sans StringLength si vous prévoyez de longues adresses
+        public string Address { get; set; }
 
-        // DriverLicenseNumber
+        // =========================
+        // Legal info
+        // =========================
+
         [Required]
         [StringLength(50)]
         public string DriverLicenseNumber { get; set; }
 
-        // BirthDate
         public DateTime BirthDate { get; set; }
 
-        // CreatedAt
+        // =========================
+        // Metadata
+        // =========================
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        /* * Propriété de Navigation (pour EF Core)
-         * Un client peut avoir plusieurs réservations (Relation 1 à N)
-        */
-        public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+        // =========================
+        // Navigation
+        // =========================
+
+        public virtual ICollection<Reservation> Reservations { get; set; }
+            = new List<Reservation>();
     }
 }

@@ -15,13 +15,43 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarRental Client</a>
-                @* Added: Navigation Link to Vehicle List *@
-                
+        <nav class="custom-navbar">
+            <div class="nav-container">
+
+                <!-- Logo / Brand -->
+                <a class="brand" asp-controller="Home" asp-action="Index">
+                    CarRental
+                </a>
+
+                <!-- Menu -->
+                <ul class="nav-links">
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">Accueil</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Account" asp-action="Login">Connexion</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="About">À propos</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="Contact">Contact</a>
+                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="ReservationPage"
+                               asp-action="MyReservations">
+                                Mes réservations
+                            </a>
+                        </li>
+                    }
+
+                </ul>
             </div>
         </nav>
+
     </header>
 
     <div class="container">

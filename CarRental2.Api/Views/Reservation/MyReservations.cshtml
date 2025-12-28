@@ -1,0 +1,84 @@
+﻿@model CarRental.Api.ViewModels.MyReservationsViewModel
+
+@{
+    ViewData["Title"] = "Mes réservations";
+}
+
+<div class="reservation-page-light">
+
+    <h2>Bonjour @Model.ClientName 👋</h2>
+
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <div class="logout-container">
+            <a class="logout-link" asp-controller="Account" asp-action="Logout">
+                🚪 Se déconnecter
+            </a>
+        </div>
+    }
+
+    <div class="stats-card">
+        <h4>Total de réservations</h4>
+        <span>@Model.TotalReservations</span>
+    </div>
+
+    @if (!Model.Reservations.Any())
+    {
+        <p>Aucune réservation trouvée.</p>
+    }
+    else
+    {
+        <table class="table table-hover reservations-table">
+            <thead>
+                <tr>
+                    <th>Véhicule</th>
+                    <th>Début</th>
+                    <th>Fin</th>
+                    <th>Tarif / jour</th>
+                    <th>Total</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Reservations)
+                {
+                    <tr>
+                        <td>@r.VehicleBrand @r.VehicleName</td>
+                        <td>@r.StartDate.ToShortDateString()</td>
+                        <td>@r.EndDate.ToShortDateString()</td>
+                        <td>@r.DailyRate.ToString("C")</td>
+                        <td>@r.TotalPrice.ToString("C")</td>
+                        <td>
+                            <span class="badge status-@r.Status.ToLower()">
+                                @r.Status
+                            </span>
+                        </td>
+                        <td>
+                            @if (r.Status == "Pending")
+                            {
+                                <form asp-controller="Reservation"
+                                      asp-action="Cancel"
+                                      method="post"
+                                      onsubmit="return confirm('Voulez-vous vraiment annuler cette réservation ?');">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden" name="reservationId" value="@r.ReservationId" />
+
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        ❌ Annuler
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted">—</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
