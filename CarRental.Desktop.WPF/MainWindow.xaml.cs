@@ -3,6 +3,7 @@ using CarRental.Desktop.WPF;
 using CarRental2.Core.Interfaces;
 using CarRental2.Core.Interfaces.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System; // Ajouté pour Exception
 using System.Windows;
 
 namespace CarRental.Desktop.WPF
@@ -13,7 +14,6 @@ namespace CarRental.Desktop.WPF
     public partial class MainWindow : Window
     {
         private readonly IUnitOfWork _unitOfWork;
-        // Injecter le service de véhicules/maintenance spécifique
         private readonly IVehicleService _vehicleService;
         private readonly IStatsService _statsService;
         private readonly IServiceProvider _serviceProvider;
@@ -25,7 +25,7 @@ namespace CarRental.Desktop.WPF
         {
             InitializeComponent();
             _unitOfWork = unitOfWork;
-            _vehicleService = vehicleService; // Initialisation
+            _vehicleService = vehicleService; 
             _statsService = statsService;
             _serviceProvider = serviceProvider;
 
@@ -34,10 +34,8 @@ namespace CarRental.Desktop.WPF
 
         private void InitializeViews()
         {
-            // Création du DashboardPage en injectant le IStatsService
-            var dashboardControl = new DashboardPage(_statsService);
+            var dashboardControl = new DashboardPage(_statsService, _vehicleService);
 
-            // Placer le UserControl dans le ContentControl nommé "MainDashboardContent"
             if (MainDashboardContent != null)
             {
                 MainDashboardContent.Content = dashboardControl;
@@ -83,19 +81,18 @@ namespace CarRental.Desktop.WPF
         }
 
         // =======================================================
-        // GESTION DE LA MAINTENANCE (CORRIGÉ)
+        // GESTION DE LA MAINTENANCE
         // =======================================================
 
         private void BtnOpenMaintenanceManagement_Click(object sender, RoutedEventArgs e)
         {
-            // Correction : Passage de IVehicleService
+            
             var window = new MaintenanceManagementWindow(_vehicleService);
             window.Show();
         }
 
         private void BtnOpenFinancialReports_Click(object sender, RoutedEventArgs e)
         {
-            // IMPORTANT : Utiliser le ServiceProvider pour résoudre la fenêtre et ses dépendances
             try
             {
                 var reportsWindow = _serviceProvider.GetRequiredService<FinancialReportsWindow>();

@@ -49,5 +49,7 @@ namespace CarRental2.Core.Interfaces.Services
         /// Récupère le chemin (ImagePath) de l'image principale d'un véhicule.
         /// </summary>
         Task<string> GetPrimaryVehicleImagePathAsync(Guid vehicleId); // <-- Ajout de la méthode
+
+        Task<IEnumerable<Maintenance>> GetUpcomingMaintenancesAsync(int daysThreshold);
     }
 }
